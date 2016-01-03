@@ -5,10 +5,6 @@ use Automattic\WooCommerce\Request\Request;
 
 class Client {
 
-    protected $url;
-    protected $consumerKey;
-    protected $consumerSecret;
-    protected $args;
     private $request;
 
     public function __construct($url, $consumerKey, $consumerSecret, $args) {
