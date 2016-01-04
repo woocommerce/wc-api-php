@@ -40,7 +40,7 @@ class Client
      * @param string $consumerSecret Consumer secret.
      * @param array  $options        Options (version, timeout, verify_ssl).
      */
-    public function __construct($url, $consumerKey, $consumerSecret, $options)
+    public function __construct($url, $consumerKey, $consumerSecret, $options = [])
     {
         $this->_request = new Request($url, $consumerKey, $consumerSecret, $options);
     }
@@ -55,7 +55,7 @@ class Client
      */
     public function post($endpoint, $data)
     {
-
+        return $this->_request->request($endpoint, 'POST', $data);
     }
 
     /**
@@ -68,7 +68,7 @@ class Client
      */
     public function put($endpoint, $data)
     {
-
+        return $this->_request->request($endpoint, 'PUT', $data);
     }
 
     /**
@@ -79,9 +79,9 @@ class Client
      *
      * @return array
      */
-    public function get($endpoint, $params)
+    public function get($endpoint, $params = [])
     {
-
+        return $this->_request->request($endpoint, 'GET', [], $params);
     }
 
     /**
@@ -92,8 +92,8 @@ class Client
      *
      * @return array
      */
-    public function delete($endpoint, $params)
+    public function delete($endpoint, $params = [])
     {
-
+        return $this->_request->request($endpoint, 'DELETE', [], $params);
     }
 }
