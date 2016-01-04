@@ -3,32 +3,70 @@ namespace Automattic\WooCommerce\Request;
 
 class Request {
 
+    const VERSION = 'v3';
     protected $url;
     protected $consumerKey;
     protected $consumerSecret;
     protected $version;
     protected $isSsl;
-    protected $args;
+    protected $verifySsl;
+    protected $timeout;
 
-    public function __construct($url, $consumerKey, $consumerSecret, $args) {
-        $this->version = $this->getVersion($args);
-        $this->isSsl = $this->isSsl($url);
-        $this->url = $this->buildApiUrl($url);
-        $this->consumerKey = $consumerKey;
+    public function __construct($url, $consumerKey, $consumerSecret, $options) {
+        $this->version        = $this->getVersion($options);
+        $this->isSsl          = $this->isSsl($url);
+        $this->url            = $this->buildApiUrl($url);
+        $this->consumerKey    = $consumerKey;
         $this->consumerSecret = $consumerSecret;
+        $this->verifySsl      = $this->verifySsl($options);
+        $this->timeout        = $this->getTimeout($options);
     }
 
-    protected function getVersion($args) {
-        return isset( $args['version'] ) ? $args['version'] : 'v3';
+    protected function getVersion($options) {
+        return isset( $options['version'] ) ? $options['version'] : self::VERSION;
     }
 
     protected function isSsl($url) {
-        return 'https://' === substr($url, 0, 8);
+        return 'https://' === \substr($url, 0, 8);
     }
 
     protected function buildApiUrl($url) {
-        $url = '/' === substr($url, -1) ? $url : $url . '/';
+        return \rtrim( $url, '/' ) . '/wc-api/' + $this->version + '/';
+    }
 
-        return $url . 'wc-api/' + $this->version + '/';
+    protected function verifySsl($options) {
+        return isset( $options['verify_ssl'] ) ? (bool) $options['verify_ssl'] : true;
+    }
+
+    protected function getTimeout($options) {
+        return isset( $options['timeout'] ) ? (int) $options['timeout'] : 15;
+    }
+
+    public function request($endpoint, $method, $data = [], $params = []) {
+        $ch       = \curl_init();
+        $request  = [];
+        $response = [];
+
+        $request['headers'] = [
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'User-Agent: WooCommerce API Client-PHP/1.0',
+        ];
+
+        \curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl );
+        \curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, $this->verifySsl );
+        \curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $this->timeout );
+        \curl_setopt( $ch, CURLOPT_TIMEOUT, $this->timeout );
+        \curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        \curl_setopt( $ch, CURLOPT_HTTPHEADER, $request['headers'] );
+
+        $response['body'] = \curl_exec( $ch );
+
+        \curl_close( $ch );
+
+        return [
+            'request'  => $request,
+            'response' => $response,
+        ];
     }
 }
