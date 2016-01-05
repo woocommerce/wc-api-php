@@ -31,11 +31,11 @@ class Client
     const VERSION  = '1.0.0';
 
     /**
-     * Instance of Automattic\WooCommerce\HttpClient\HttpClient.
+     * Http client instance.
      *
      * @var HttpClient
      */
-    private $_http;
+    private $client;
 
     /**
      * Initialize client.
@@ -47,7 +47,7 @@ class Client
      */
     public function __construct($url, $consumerKey, $consumerSecret, $options = [])
     {
-        $this->_http = new HttpClient($url, $consumerKey, $consumerSecret, $options);
+        $this->client = new HttpClient($url, $consumerKey, $consumerSecret, $options);
     }
 
     /**
@@ -60,7 +60,7 @@ class Client
      */
     public function post($endpoint, $data)
     {
-        return $this->_http->request($endpoint, 'POST', $data);
+        return $this->client->request($endpoint, 'POST', $data);
     }
 
     /**
@@ -73,32 +73,32 @@ class Client
      */
     public function put($endpoint, $data)
     {
-        return $this->_http->request($endpoint, 'PUT', $data);
+        return $this->client->request($endpoint, 'PUT', $data);
     }
 
     /**
      * GET method.
      *
-     * @param string $endpoint API endpoint.
-     * @param array  $params   Request params.
+     * @param string $endpoint   API endpoint.
+     * @param array  $parameters Request parameters.
      *
      * @return array
      */
-    public function get($endpoint, $params = [])
+    public function get($endpoint, $parameters = [])
     {
-        return $this->_http->request($endpoint, 'GET', [], $params);
+        return $this->client->request($endpoint, 'GET', [], $parameters);
     }
 
     /**
      * DELETE method.
      *
-     * @param string $endpoint API endpoint.
-     * @param array  $params   Request params.
+     * @param string $endpoint   API endpoint.
+     * @param array  $parameters Request parameters.
      *
      * @return array
      */
-    public function delete($endpoint, $params = [])
+    public function delete($endpoint, $parameters = [])
     {
-        return $this->_http->request($endpoint, 'DELETE', [], $params);
+        return $this->client->request($endpoint, 'DELETE', [], $parameters);
     }
 }

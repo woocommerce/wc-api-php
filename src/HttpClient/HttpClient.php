@@ -11,6 +11,9 @@
 
 namespace Automattic\WooCommerce\HttpClient;
 
+use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\Request;
+
 /**
  * REST API HTTP class.
  *
@@ -31,6 +34,8 @@ class HttpClient
     protected $isSsl;
     protected $verifySsl;
     protected $timeout;
+
+    public $request;
 
     public function __construct($url, $consumerKey, $consumerSecret, $options)
     {
@@ -68,23 +73,23 @@ class HttpClient
         return isset($options['timeout']) ? (int) $options['timeout'] : 15;
     }
 
-    public function request($endpoint, $method, $data = [], $params = [])
+    public function request($endpoint, $method, $data = [], $parameters = [])
     {
         $ch       = \curl_init();
-        $request  = [];
+        $request  = new Request();
         $response = [];
 
-        $request['headers'] = [
+        $request->setHeaders([
             'Accept: application/json',
             'Content-Type: application/json',
-            'User-Agent: WooCommerce API Client-PHP/' . \Automattic\WooCommerce\Client::VERSION,
-        ];
+            'User-Agent: WooCommerce API Client-PHP/' . Client::VERSION,
+        ]);
 
         \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl);
         \curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
         \curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($ch, CURLOPT_HTTPHEADER, $request['headers']);
+        \curl_setopt($ch, CURLOPT_HTTPHEADER, $request->getHeaders());
 
         $response['body'] = \curl_exec($ch);
 
