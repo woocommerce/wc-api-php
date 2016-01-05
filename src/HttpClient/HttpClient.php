@@ -171,6 +171,22 @@ class HttpClient
 
         \curl_close($this->ch);
 
-        return json_decode($response->getBody());
+        return $this->decodeResponseBody($response->getBody());
+    }
+
+    /**
+     * Decode response body.
+     *
+     * @param  string $data Response in JSON format.
+     *
+     * @return array
+     */
+    protected function decodeResponseBody($data)
+    {
+        // Remove any HTML or text from cache plugins or PHP notices.
+        \preg_match('/\{(?:[^{}]|(?R))*\}/', $data, $matches);
+        $data = isset($matches[0]) ? $matches[0] : '';
+
+        return \json_decode($data, true);
     }
 }
