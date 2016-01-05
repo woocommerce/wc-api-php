@@ -10,6 +10,7 @@ namespace Automattic\WooCommerce\HttpClient;
 
 use Automattic\WooCommerce\Client;
 use Automattic\WooCommerce\HttpClient\Request;
+use Automattic\WooCommerce\HttpClient\Response;
 
 /**
  * REST API HTTP class.
@@ -70,7 +71,7 @@ class HttpClient
     {
         $ch       = \curl_init();
         $request  = new Request();
-        $response = [];
+        $response = new Response();
 
         $request->setHeaders([
             'Accept: application/json',
@@ -84,7 +85,8 @@ class HttpClient
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         \curl_setopt($ch, CURLOPT_HTTPHEADER, $request->getHeaders());
 
-        $response['body'] = \curl_exec($ch);
+        $body = \curl_exec($ch);
+        $response->setBody($body);
 
         \curl_close($ch);
 

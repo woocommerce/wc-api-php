@@ -60,13 +60,8 @@ class Request
      * @param array  $headers    Request headers.
      * @param array  $body       Request body.
      */
-    public function __construct(
-        $endpoint = '',
-        $method = 'POST',
-        $parameters = [],
-        $headers = [],
-        $body = []
-    ) {
+    public function __construct($endpoint = '', $method = 'POST', $parameters = [], $headers = [], $body = [])
+    {
         $this->endpoint   = $endpoint;
         $this->method     = $method;
         $this->parameters = $parameters;
