@@ -1,26 +1,26 @@
 <?php
 /**
- * WooCommerce REST API Request
+ * WooCommerce REST API HTTP Client
  *
- * @category Request
+ * @category HttpClient
  * @package  Automattic/WooCommerce
  * @author   Claudio Sanches <claudio.sanches@automattic.com>
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     https://github.com/woothemes/wc-api-php
  */
 
-namespace Automattic\WooCommerce\Request;
+namespace Automattic\WooCommerce\HttpClient;
 
 /**
- * REST API Request class.
+ * REST API HTTP class.
  *
- * @category Request
+ * @category HttpClient
  * @package  Automattic/WooCommerce
  * @author   Claudio Sanches <claudio.sanches@automattic.com>
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     https://github.com/woothemes/wc-api-php
  */
-class Request
+class HttpClient
 {
 
     const VERSION = 'v3';
@@ -77,11 +77,10 @@ class Request
         $request['headers'] = [
             'Accept: application/json',
             'Content-Type: application/json',
-            'User-Agent: WooCommerce API Client-PHP/1.0',
+            'User-Agent: WooCommerce API Client-PHP/' . \Automattic\WooCommerce\Client::VERSION,
         ];
 
         \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl);
-        \curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->verifySsl);
         \curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
         \curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -11,7 +11,7 @@
 
 namespace Automattic\WooCommerce;
 
-use Automattic\WooCommerce\Request\Request;
+use Automattic\WooCommerce\HttpClient\HttpClient;
 
 /**
  * REST API Client class.
@@ -26,11 +26,16 @@ class Client
 {
 
     /**
-     * Instance of Automattic\WooCommerce\Request\Request.
-     *
-     * @var Request
+     * WooCommerce REST API Client version.
      */
-    private $_request;
+    const VERSION  = '1.0.0';
+
+    /**
+     * Instance of Automattic\WooCommerce\HttpClient\HttpClient.
+     *
+     * @var HttpClient
+     */
+    private $_http;
 
     /**
      * Initialize client.
@@ -42,7 +47,7 @@ class Client
      */
     public function __construct($url, $consumerKey, $consumerSecret, $options = [])
     {
-        $this->_request = new Request($url, $consumerKey, $consumerSecret, $options);
+        $this->_http = new HttpClient($url, $consumerKey, $consumerSecret, $options);
     }
 
     /**
@@ -55,7 +60,7 @@ class Client
      */
     public function post($endpoint, $data)
     {
-        return $this->_request->request($endpoint, 'POST', $data);
+        return $this->_http->request($endpoint, 'POST', $data);
     }
 
     /**
@@ -68,7 +73,7 @@ class Client
      */
     public function put($endpoint, $data)
     {
-        return $this->_request->request($endpoint, 'PUT', $data);
+        return $this->_http->request($endpoint, 'PUT', $data);
     }
 
     /**
@@ -81,7 +86,7 @@ class Client
      */
     public function get($endpoint, $params = [])
     {
-        return $this->_request->request($endpoint, 'GET', [], $params);
+        return $this->_http->request($endpoint, 'GET', [], $params);
     }
 
     /**
@@ -94,6 +99,6 @@ class Client
      */
     public function delete($endpoint, $params = [])
     {
-        return $this->_request->request($endpoint, 'DELETE', [], $params);
+        return $this->_http->request($endpoint, 'DELETE', [], $params);
     }
 }
