@@ -20,23 +20,101 @@ use Automattic\WooCommerce\HttpClient\Response;
 class HttpClient
 {
 
+    /**
+     * Default WooCommerce REST API version.
+     */
     const VERSION = 'v3';
 
+    /**
+     * Default request timeout.
+     */
+    const TIMEOUT = 15;
+
+    /**
+     * Last request.
+     *
+     * @var Request
+     */
     public $lastRequest;
+
+    /**
+     * Last response.
+     *
+     * @var Response
+     */
     public $lastResponse;
 
+    /**
+     * cURL handle.
+     *
+     * @var resource
+     */
     protected $ch;
 
+    /**
+     * Store API URL.
+     *
+     * @var string
+     */
     protected $url;
+
+    /**
+     * Consumer key.
+     *
+     * @var string
+     */
     protected $consumerKey;
+
+    /**
+     * Consumer secret.
+     *
+     * @var string
+     */
     protected $consumerSecret;
+
+    /**
+     * WooCommerce REST API version.
+     *
+     * @var string
+     */
     protected $version;
+
+    /**
+     * If is under SSL.
+     *
+     * @var bool
+     */
     protected $isSsl;
+
+    /**
+     * If need verify SSL.
+     *
+     * @var bool
+     */
     protected $verifySsl;
+
+    /**
+     * Requests timeout.
+     *
+     * @var int
+     */
     protected $timeout;
 
+    /**
+     * Response headers.
+     *
+     * @var string
+     */
     private $responseHeaders;
 
+    /**
+     * Initialize HTTP client.
+     *
+     * @param string $url            Store URL.
+     * @param string $consumerKey    Consumer key.
+     * @param string $consumerSecret Consumer Secret.
+     * @param array  $options        Client options.
+     */
     public function __construct($url, $consumerKey, $consumerSecret, $options)
     {
         $this->version        = $this->getVersion($options);
@@ -48,31 +126,76 @@ class HttpClient
         $this->timeout        = $this->getTimeout($options);
     }
 
+    /**
+     * Get API version.
+     *
+     * @param array $options Client options.
+     *
+     * @return string
+     */
     protected function getVersion($options)
     {
         return isset($options['version']) ? $options['version'] : self::VERSION;
     }
 
+    /**
+     * Check if is under SSL.
+     *
+     * @param string $url Store URL.
+     *
+     * @return bool
+     */
     protected function isSsl($url)
     {
         return 'https://' === \substr($url, 0, 8);
     }
 
+    /**
+     * Build API URL.
+     *
+     * @param string $url Store URL.
+     *
+     * @return string
+     */
     protected function buildApiUrl($url)
     {
         return \rtrim($url, '/') . '/wc-api/' . $this->version . '/';
     }
 
+    /**
+     * Check if need to verify SSL.
+     *
+     * @param array $options Client options.
+     *
+     * @return bool
+     */
     protected function verifySsl($options)
     {
         return isset($options['verify_ssl']) ? (bool) $options['verify_ssl'] : true;
     }
 
+    /**
+     * Get timeout.
+     *
+     * @param array $options Client options.
+     *
+     * @return int
+     */
     protected function getTimeout($options)
     {
-        return isset($options['timeout']) ? (int) $options['timeout'] : 15;
+        return isset($options['timeout']) ? (int) $options['timeout'] : self::TIMEOUT;
     }
 
+    /**
+     * Create request.
+     *
+     * @param string $endpoint   Request endpoint.
+     * @param string $method     Request method.
+     * @param array  $data       Request data.
+     * @param array  $parameters Request parameters.
+     *
+     * @return Request
+     */
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
 
@@ -111,6 +234,11 @@ class HttpClient
         return $this->lastRequest;
     }
 
+    /**
+     * Get response headers.
+     *
+     * @return array
+     */
     public function getResponseHeaders()
     {
         $headers = [];
@@ -118,6 +246,7 @@ class HttpClient
         $lines   = \array_filter($lines, 'trim');
 
         foreach ($lines as $index => $line) {
+            // Remove HTTP/xxx param.
             if (0 === $index) {
                 continue;
             }
@@ -129,6 +258,11 @@ class HttpClient
         return $headers;
     }
 
+    /**
+     * Create response.
+     *
+     * @return Response
+     */
     protected function createResponse()
     {
 
@@ -150,6 +284,16 @@ class HttpClient
         return $this->lastResponse;
     }
 
+    /**
+     * Make requests.
+     *
+     * @param string $endpoint   Request endpoint.
+     * @param string $method     Request method.
+     * @param array  $data       Request data.
+     * @param array  $parameters Request parameters.
+     *
+     * @return array
+     */
     public function request($endpoint, $method, $data = [], $parameters = [])
     {
         // Initialize cURL.
