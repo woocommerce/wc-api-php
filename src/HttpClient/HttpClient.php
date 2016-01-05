@@ -21,6 +21,12 @@ class HttpClient
 {
 
     const VERSION = 'v3';
+
+    public $lastRequest;
+    public $lastResponse;
+
+    protected $ch;
+
     protected $url;
     protected $consumerKey;
     protected $consumerSecret;
@@ -29,7 +35,7 @@ class HttpClient
     protected $verifySsl;
     protected $timeout;
 
-    public $request;
+    private $responseHeaders;
 
     public function __construct($url, $consumerKey, $consumerSecret, $options)
     {
@@ -54,7 +60,7 @@ class HttpClient
 
     protected function buildApiUrl($url)
     {
-        return \rtrim($url, '/') . '/wc-api/' + $this->version + '/';
+        return \rtrim($url, '/') . '/wc-api/' . $this->version . '/';
     }
 
     protected function verifySsl($options)
@@ -67,32 +73,104 @@ class HttpClient
         return isset($options['timeout']) ? (int) $options['timeout'] : 15;
     }
 
+    protected function createRequest($endpoint, $method, $data = [], $parameters = [])
+    {
+
+        $url = $this->url . $endpoint;
+
+        switch ($method) {
+            case 'POST':
+                $body = \json_encode($data);
+                \curl_setopt($this->ch, CURLOPT_POST, true);
+                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getBody());
+                break;
+            case 'PUT':
+                $body = \json_encode($data);
+                \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getBody());
+                break;
+            case 'DELETE':
+                $body = '';
+                \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getBody());
+                break;
+
+            default:
+                $body = '';
+                break;
+        }
+
+        $headers = [
+            'Accept'       => 'application/json',
+            'Content-Type' => 'application/json',
+            'User-Agent'   => 'WooCommerce API Client-PHP/' . Client::VERSION,
+        ];
+
+        $this->lastRequest = new Request($url, $method, $parameters, $headers, $body);
+
+        return $this->lastRequest;
+    }
+
+    public function getResponseHeaders()
+    {
+        $headers = [];
+        $lines   = \explode("\n", $this->responseHeaders);
+        $lines   = \array_filter($lines, 'trim');
+
+        foreach ($lines as $index => $line) {
+            if (0 === $index) {
+                continue;
+            }
+
+            list($key, $value) = \explode(': ', $line);
+            $headers[$key] = $value;
+        }
+
+        return $headers;
+    }
+
+    protected function createResponse()
+    {
+
+        // Set response headers.
+        $this->responseHeaders = '';
+        \curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function ($_, $headers) {
+            $this->responseHeaders .= $headers;
+            return \strlen($headers);
+        });
+
+        // Get response data.
+        $body    = \curl_exec($this->ch);
+        $code    = \curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+        $headers = $this->getResponseHeaders();
+
+        // Register last response.
+        $this->lastResponse = new Response($code, $headers, $body);
+
+        return $this->lastResponse;
+    }
+
     public function request($endpoint, $method, $data = [], $parameters = [])
     {
-        $ch       = \curl_init();
-        $request  = new Request();
-        $response = new Response();
+        // Initialize cURL.
+        $this->ch = \curl_init();
 
-        $request->setHeaders([
-            'Accept: application/json',
-            'Content-Type: application/json',
-            'User-Agent: WooCommerce API Client-PHP/' . Client::VERSION,
-        ]);
+        // Set request args.
+        $request = $this->createRequest($endpoint, $method, $data, $parameters);
 
-        \curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl);
-        \curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
-        \curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
-        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($ch, CURLOPT_HTTPHEADER, $request->getHeaders());
+        // Default cURL settings.
+        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl);
+        \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
+        \curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
+        \curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($this->ch, CURLOPT_HTTPHEADER, $request->getRawHeaders());
+        \curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
 
-        $body = \curl_exec($ch);
-        $response->setBody($body);
+        // Get response.
+        $response = $this->createResponse();
 
-        \curl_close($ch);
+        \curl_close($this->ch);
 
-        return [
-            'request'  => $request,
-            'response' => $response,
-        ];
+        return json_decode($response->getBody());
     }
 }

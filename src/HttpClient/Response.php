@@ -86,7 +86,7 @@ class Response
      *
      * @return int
      */
-    public function getCode($code)
+    public function getCode()
     {
         return $this->code;
     }
@@ -96,7 +96,7 @@ class Response
      *
      * @return array $headers Response headers.
      */
-    public function getHeaders($headers)
+    public function getHeaders()
     {
         return $this->headers;
     }
@@ -106,7 +106,7 @@ class Response
      *
      * @return string $body Response body.
      */
-    public function getBody($body)
+    public function getBody()
     {
         return $this->body;
     }

@@ -17,11 +17,11 @@ class Request
 {
 
     /**
-     * Request endpoint.
+     * Request url.
      *
      * @var string
      */
-    private $endpoint;
+    private $url;
 
     /**
      * Request method.
@@ -47,22 +47,22 @@ class Request
     /**
      * Request body.
      *
-     * @var array
+     * @var string
      */
     private $body;
 
     /**
      * Initialize request.
      *
-     * @param string $endpoint   Request endpoint.
+     * @param string $url        Request url.
      * @param string $method     Request method.
      * @param array  $parameters Request paramenters.
      * @param array  $headers    Request headers.
-     * @param array  $body       Request body.
+     * @param string $body       Request body.
      */
-    public function __construct($endpoint = '', $method = 'POST', $parameters = [], $headers = [], $body = [])
+    public function __construct($url = '', $method = 'POST', $parameters = [], $headers = [], $body = '')
     {
-        $this->endpoint   = $endpoint;
+        $this->url        = $url;
         $this->method     = $method;
         $this->parameters = $parameters;
         $this->headers    = $headers;
@@ -70,13 +70,13 @@ class Request
     }
 
     /**
-     * Set endpoint.
+     * Set url.
      *
-     * @param string $endpoint Request endpoint.
+     * @param string $url Request url.
      */
-    public function setEndpoint($endpoint)
+    public function setUrl($url)
     {
-        $this->endpoint = $endpoint;
+        $this->url = $url;
     }
 
     /**
@@ -112,7 +112,7 @@ class Request
     /**
      * Set body.
      *
-     * @param array $body Request body.
+     * @param string $body Request body.
      */
     public function setBody($body)
     {
@@ -120,13 +120,13 @@ class Request
     }
 
     /**
-     * Get endpoint.
+     * Get url.
      *
      * @return string
      */
-    public function getEndpoint()
+    public function getUrl()
     {
-        return $this->endpoint;
+        return $this->url;
     }
 
     /**
@@ -160,9 +160,25 @@ class Request
     }
 
     /**
-     * Get body.
+     * Get raw headers.
      *
      * @return array
+     */
+    public function getRawHeaders()
+    {
+        $headers = [];
+
+        foreach ($this->headers as $key => $value) {
+            $headers[] = $key . ': ' . $value;
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Get body.
+     *
+     * @return string
      */
     public function getBody()
     {

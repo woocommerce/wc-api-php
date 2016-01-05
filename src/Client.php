@@ -28,7 +28,7 @@ class Client
      *
      * @var HttpClient
      */
-    private $client;
+    public $client;
 
     /**
      * Initialize client.
