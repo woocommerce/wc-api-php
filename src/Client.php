@@ -4,9 +4,6 @@
  *
  * @category Client
  * @package  Automattic/WooCommerce
- * @author   Claudio Sanches <claudio.sanches@automattic.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/woothemes/wc-api-php
  */
 
 namespace Automattic\WooCommerce;
@@ -16,11 +13,7 @@ use Automattic\WooCommerce\HttpClient\HttpClient;
 /**
  * REST API Client class.
  *
- * @category Client
- * @package  Automattic/WooCommerce
- * @author   Claudio Sanches <claudio.sanches@automattic.com>
- * @license  https://opensource.org/licenses/MIT MIT
- * @link     https://github.com/woothemes/wc-api-php
+ * @package Automattic/WooCommerce
  */
 class Client
 {
