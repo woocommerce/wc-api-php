@@ -297,7 +297,7 @@ class HttpClient
      */
     public function request($endpoint, $method, $data = [], $parameters = [])
     {
-        if (!function_exists('curl_version')) {
+        if (!\function_exists('curl_version')) {
             throw new HttpClientException('cURL is NOT installed on this server', -1, new Request(), new Response());
         }
 
@@ -320,8 +320,8 @@ class HttpClient
         $response = $this->createResponse();
 
         // Check for cURL errors.
-        if (curl_errno($this->ch)) {
-            throw new HttpClientException('cURL Error: ' . curl_error($this->ch), 0, $request, $response);
+        if (\curl_errno($this->ch)) {
+            throw new HttpClientException('cURL Error: ' . \curl_error($this->ch), 0, $request, $response);
         }
 
         \curl_close($this->ch);
@@ -343,7 +343,7 @@ class HttpClient
                 $errorCode    = $parsedResponse['errors']['code'];
             }
 
-            throw new HttpClientException(sprintf('Error: %s [%s]', $errorMessage, $errorCode), $response->getCode(), $request, $response);
+            throw new HttpClientException(\sprintf('Error: %s [%s]', $errorMessage, $errorCode), $response->getCode(), $request, $response);
         }
 
         return $parsedResponse;
