@@ -44,7 +44,7 @@ class Response
      * @param array  $headers Response headers.
      * @param string $body    Response body.
      */
-    public function __construct($code = 200, $headers = [], $body = '')
+    public function __construct($code = 0, $headers = [], $body = '')
     {
         $this->code    = $code;
         $this->headers = $headers;

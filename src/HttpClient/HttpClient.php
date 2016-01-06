@@ -11,6 +11,7 @@ namespace Automattic\WooCommerce\HttpClient;
 use Automattic\WooCommerce\Client;
 use Automattic\WooCommerce\HttpClient\Request;
 use Automattic\WooCommerce\HttpClient\Response;
+use Automattic\WooCommerce\HttpClient\HttpClientException;
 
 /**
  * REST API HTTP class.
@@ -29,20 +30,6 @@ class HttpClient
      * Default request timeout.
      */
     const TIMEOUT = 15;
-
-    /**
-     * Last request.
-     *
-     * @var Request
-     */
-    public $lastRequest;
-
-    /**
-     * Last response.
-     *
-     * @var Response
-     */
-    public $lastResponse;
 
     /**
      * cURL handle.
@@ -99,6 +86,20 @@ class HttpClient
      * @var int
      */
     protected $timeout;
+
+    /**
+     * Request.
+     *
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * Response.
+     *
+     * @var Response
+     */
+    private $response;
 
     /**
      * Response headers.
@@ -229,9 +230,9 @@ class HttpClient
             'User-Agent'   => 'WooCommerce API Client-PHP/' . Client::VERSION,
         ];
 
-        $this->lastRequest = new Request($url, $method, $parameters, $headers, $body);
+        $this->request = new Request($url, $method, $parameters, $headers, $body);
 
-        return $this->lastRequest;
+        return $this->getRequest();
     }
 
     /**
@@ -278,10 +279,10 @@ class HttpClient
         $code    = \curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
         $headers = $this->getResponseHeaders();
 
-        // Register last response.
-        $this->lastResponse = new Response($code, $headers, $body);
+        // Register response.
+        $this->response = new Response($code, $headers, $body);
 
-        return $this->lastResponse;
+        return $this->getResponse();
     }
 
     /**
@@ -296,6 +297,10 @@ class HttpClient
      */
     public function request($endpoint, $method, $data = [], $parameters = [])
     {
+        if (!function_exists('curl_version')) {
+            throw new HttpClientException('cURL is NOT installed on this server', -1, new Request(), new Response());
+        }
+
         // Initialize cURL.
         $this->ch = \curl_init();
 
@@ -304,6 +309,7 @@ class HttpClient
 
         // Default cURL settings.
         \curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl);
+        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $this->verifySsl);
         \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
         \curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
         \curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
@@ -313,9 +319,34 @@ class HttpClient
         // Get response.
         $response = $this->createResponse();
 
+        // Check for cURL errors.
+        if (curl_errno($this->ch)) {
+            throw new HttpClientException('cURL Error: ' . curl_error($this->ch), 0, $request, $response);
+        }
+
         \curl_close($this->ch);
 
-        return $this->decodeResponseBody($response->getBody());
+        $parsedResponse = $this->decodeResponseBody($response->getBody());
+
+        // Test if return a valid JSON.
+        if (null === $parsedResponse) {
+            throw new HttpClientException('Invalid JSON returned', $response->getCode(), $request, $response);
+        }
+
+        // Any non-200/201/202 response code indicates an error.
+        if (!\in_array($response->getCode(), ['200', '201', '202'])) {
+            if (!empty($parsedResponse['errors'][0])) {
+                $errorMessage = $parsedResponse['errors'][0]['message'];
+                $errorCode    = $parsedResponse['errors'][0]['code'];
+            } else {
+                $errorMessage = $parsedResponse['errors']['message'];
+                $errorCode    = $parsedResponse['errors']['code'];
+            }
+
+            throw new HttpClientException(sprintf('Error: %s [%s]', $errorMessage, $errorCode), $response->getCode(), $request, $response);
+        }
+
+        return $parsedResponse;
     }
 
     /**
@@ -332,5 +363,25 @@ class HttpClient
         $data = isset($matches[0]) ? $matches[0] : '';
 
         return \json_decode($data, true);
+    }
+
+    /**
+     * Get request data.
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get response data.
+     *
+     * @return Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
