@@ -24,11 +24,11 @@ class Client
     const VERSION  = '1.0.0';
 
     /**
-     * Http client instance.
+     * HttpClient instance.
      *
      * @var HttpClient
      */
-    public $client;
+    public $http;
 
     /**
      * Initialize client.
@@ -40,7 +40,7 @@ class Client
      */
     public function __construct($url, $consumerKey, $consumerSecret, $options = [])
     {
-        $this->client = new HttpClient($url, $consumerKey, $consumerSecret, $options);
+        $this->http = new HttpClient($url, $consumerKey, $consumerSecret, $options);
     }
 
     /**
@@ -53,7 +53,7 @@ class Client
      */
     public function post($endpoint, $data)
     {
-        return $this->client->request($endpoint, 'POST', $data);
+        return $this->http->request($endpoint, 'POST', $data);
     }
 
     /**
@@ -66,7 +66,7 @@ class Client
      */
     public function put($endpoint, $data)
     {
-        return $this->client->request($endpoint, 'PUT', $data);
+        return $this->http->request($endpoint, 'PUT', $data);
     }
 
     /**
@@ -79,7 +79,7 @@ class Client
      */
     public function get($endpoint, $parameters = [])
     {
-        return $this->client->request($endpoint, 'GET', [], $parameters);
+        return $this->http->request($endpoint, 'GET', [], $parameters);
     }
 
     /**
@@ -92,6 +92,6 @@ class Client
      */
     public function delete($endpoint, $parameters = [])
     {
-        return $this->client->request($endpoint, 'DELETE', [], $parameters);
+        return $this->http->request($endpoint, 'DELETE', [], $parameters);
     }
 }
