@@ -88,6 +88,13 @@ class HttpClient
     protected $timeout;
 
     /**
+     * Basic authentication as query string.
+     *
+     * @var bool
+     */
+    protected $queryStringAuth;
+
+    /**
      * Request.
      *
      * @var Request
@@ -118,13 +125,14 @@ class HttpClient
      */
     public function __construct($url, $consumerKey, $consumerSecret, $options)
     {
-        $this->version        = $this->getVersion($options);
-        $this->isSsl          = $this->isSsl($url);
-        $this->url            = $this->buildApiUrl($url);
-        $this->consumerKey    = $consumerKey;
-        $this->consumerSecret = $consumerSecret;
-        $this->verifySsl      = $this->verifySsl($options);
-        $this->timeout        = $this->getTimeout($options);
+        $this->version         = $this->getVersion($options);
+        $this->isSsl           = $this->isSsl($url);
+        $this->url             = $this->buildApiUrl($url);
+        $this->consumerKey     = $consumerKey;
+        $this->consumerSecret  = $consumerSecret;
+        $this->verifySsl       = $this->verifySsl($options);
+        $this->timeout         = $this->getTimeout($options);
+        $this->queryStringAuth = $this->isQueryStringAuth($options);
     }
 
     /**
@@ -188,6 +196,19 @@ class HttpClient
     }
 
     /**
+     * Basic Authentication as query string.
+     * Some old servers are not able to use CURLOPT_USERPWD.
+     *
+     * @param array $options Client options.
+     *
+     * @return bool
+     */
+    protected function isQueryStringAuth($options)
+    {
+        return isset($options['query_string_auth']) ? (bool) $options['query_string_auth'] : false;
+    }
+
+    /**
      * Create request.
      *
      * @param string $endpoint   Request endpoint.
@@ -200,7 +221,28 @@ class HttpClient
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
 
+        // Build URL.
         $url = $this->url . $endpoint;
+
+        // Set query string for authentication.
+        if ($this->queryStringAuth) {
+            $parameters['consumer_key']    = $this->consumerKey;
+            $parameters['consumer_secret'] = $this->consumerSecret;
+        }
+
+        // Include paramenters to the URL.
+        if (!empty($parameters)) {
+            $url .= '?' . http_build_query($parameters);
+        }
+
+        // Setup authentication.
+        if ($this->isSsl) {
+            if (!$this->queryStringAuth) {
+                \curl_setopt($this->ch, CURLOPT_USERPWD, $this->consumerKey . ':' . $this->consumerSecret);
+            }
+        } else {
+            $url = '';
+        }
 
         switch ($method) {
             case 'POST':
