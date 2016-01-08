@@ -274,10 +274,8 @@ class HttpClient
 
     /**
      * Set default cURL settings.
-     *
-     * @param Request $request Request data.
      */
-    protected function setDefaultCurlSettings($request)
+    protected function setDefaultCurlSettings()
     {
         $verifySsl = $this->options->verifySsl();
         $timeout   = $this->options->getTimeout();
@@ -287,8 +285,64 @@ class HttpClient
         \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($this->ch, CURLOPT_HTTPHEADER, $request->getRawHeaders());
-        \curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
+        \curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->request->getRawHeaders());
+        \curl_setopt($this->ch, CURLOPT_URL, $this->request->getUrl());
+    }
+
+    /**
+     * Look for errors in the request.
+     *
+     * @param array $parsedResponse Parsed body response.
+     */
+    protected function lookForErrors($parsedResponse)
+    {
+        // Test if return a valid JSON.
+        if (null === $parsedResponse) {
+            throw new HttpClientException('Invalid JSON returned', $this->response->getCode(), $this->request, $this->response);
+        }
+
+        // Any non-200/201/202 response code indicates an error.
+        if (!\in_array($this->response->getCode(), ['200', '201', '202'])) {
+            if (!empty($parsedResponse['errors'][0])) {
+                $errorMessage = $parsedResponse['errors'][0]['message'];
+                $errorCode    = $parsedResponse['errors'][0]['code'];
+            } else {
+                $errorMessage = $parsedResponse['errors']['message'];
+                $errorCode    = $parsedResponse['errors']['code'];
+            }
+
+            throw new HttpClientException(\sprintf('Error: %s [%s]', $errorMessage, $errorCode), $this->response->getCode(), $this->request, $this->response);
+        }
+    }
+
+    /**
+     * Decode response body.
+     *
+     * @param  string $data Response in JSON format.
+     *
+     * @return array
+     */
+    protected function decodeResponseBody($data)
+    {
+        // Remove any HTML or text from cache plugins or PHP notices.
+        \preg_match('/\{(?:[^{}]|(?R))*\}/', $data, $matches);
+        $data = isset($matches[0]) ? $matches[0] : '';
+
+        return \json_decode($data, true);
+    }
+
+    /**
+     * Process response.
+     *
+     * @return array
+     */
+    protected function processResponse()
+    {
+        $parsedResponse = $this->decodeResponseBody($this->response->getBody());
+
+        $this->lookForErrors($parsedResponse);
+
+        return $parsedResponse;
     }
 
     /**
@@ -310,7 +364,7 @@ class HttpClient
         $request = $this->createRequest($endpoint, $method, $data, $parameters);
 
         // Default cURL settings.
-        $this->setDefaultCurlSettings($request);
+        $this->setDefaultCurlSettings();
 
         // Get response.
         $response = $this->createResponse();
@@ -322,55 +376,7 @@ class HttpClient
 
         \curl_close($this->ch);
 
-        $parsedResponse = $this->decodeResponseBody($response->getBody());
-
-        $this->lookForErrors($parsedResponse, $request, $response);
-
-        return $parsedResponse;
-    }
-
-    /**
-     * Look for errors in the request.
-     *
-     * @param array    $parsedResponse Parsed body response.
-     * @param Request  $request        Request data.
-     * @param Response $response       Response data.
-     */
-    protected function lookForErrors($parsedResponse, $request, $response)
-    {
-        // Test if return a valid JSON.
-        if (null === $parsedResponse) {
-            throw new HttpClientException('Invalid JSON returned', $response->getCode(), $request, $response);
-        }
-
-        // Any non-200/201/202 response code indicates an error.
-        if (!\in_array($response->getCode(), ['200', '201', '202'])) {
-            if (!empty($parsedResponse['errors'][0])) {
-                $errorMessage = $parsedResponse['errors'][0]['message'];
-                $errorCode    = $parsedResponse['errors'][0]['code'];
-            } else {
-                $errorMessage = $parsedResponse['errors']['message'];
-                $errorCode    = $parsedResponse['errors']['code'];
-            }
-
-            throw new HttpClientException(\sprintf('Error: %s [%s]', $errorMessage, $errorCode), $response->getCode(), $request, $response);
-        }
-    }
-
-    /**
-     * Decode response body.
-     *
-     * @param  string $data Response in JSON format.
-     *
-     * @return array
-     */
-    protected function decodeResponseBody($data)
-    {
-        // Remove any HTML or text from cache plugins or PHP notices.
-        \preg_match('/\{(?:[^{}]|(?R))*\}/', $data, $matches);
-        $data = isset($matches[0]) ? $matches[0] : '';
-
-        return \json_decode($data, true);
+        return $this->processResponse();
     }
 
     /**
