@@ -9,12 +9,13 @@
 namespace Automattic\WooCommerce\HttpClient;
 
 use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\OAuth;
 use Automattic\WooCommerce\HttpClient\Request;
 use Automattic\WooCommerce\HttpClient\Response;
 use Automattic\WooCommerce\HttpClient\HttpClientException;
 
 /**
- * REST API HTTP class.
+ * REST API HTTP Client class.
  *
  * @package Automattic/WooCommerce
  */
@@ -220,30 +221,29 @@ class HttpClient
      */
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
-
         // Build URL.
         $url = $this->url . $endpoint;
 
-        // Set query string for authentication.
-        if ($this->queryStringAuth) {
-            $parameters['consumer_key']    = $this->consumerKey;
-            $parameters['consumer_secret'] = $this->consumerSecret;
-        }
-
-        // Include paramenters to the URL.
-        if (!empty($parameters)) {
-            $url .= '?' . http_build_query($parameters);
-        }
-
         // Setup authentication.
         if ($this->isSsl) {
-            if (!$this->queryStringAuth) {
+            // Set query string for authentication.
+            if ($this->queryStringAuth) {
+                $parameters['consumer_key']    = $this->consumerKey;
+                $parameters['consumer_secret'] = $this->consumerSecret;
+            } else {
                 \curl_setopt($this->ch, CURLOPT_USERPWD, $this->consumerKey . ':' . $this->consumerSecret);
             }
         } else {
-            $url = '';
+            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->version, $method, $parameters);
+            $parameters = $oAuth->getParameters();
         }
 
+        // Include URL parameters.
+        if (!empty($parameters)) {
+            $url .= '?' . \http_build_query($parameters);
+        }
+
+        // Setup method.
         switch ($method) {
             case 'POST':
                 $body = \json_encode($data);
@@ -266,6 +266,7 @@ class HttpClient
                 break;
         }
 
+        // Setup headers.
         $headers = [
             'Accept'       => 'application/json',
             'Content-Type' => 'application/json',
