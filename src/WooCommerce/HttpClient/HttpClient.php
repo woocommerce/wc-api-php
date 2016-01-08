@@ -142,17 +142,14 @@ class HttpClient
     /**
      * Authenticate.
      *
-     * @param string $endpoint   Request endpoint.
+     * @param string $url        Request URL.
      * @param string $method     Request method.
      * @param array  $parameters Request parameters.
      *
      * @return array
      */
-    protected function authenticate($endpoint, $method, $parameters = [])
+    protected function authenticate($url, $method, $parameters = [])
     {
-        // Build URL.
-        $url = $this->url . $endpoint;
-
         // Setup authentication.
         if ($this->isSsl()) {
             $basicAuth  = new BasicAuth($this->ch, $this->consumerKey, $this->consumerSecret, $this->options->isQueryStringAuth(), $parameters);
@@ -162,10 +159,7 @@ class HttpClient
             $parameters = $oAuth->getParameters();
         }
 
-        return [
-            'url'        => $this->buildUrlQuery($url, $parameters),
-            'parameters' => $parameters,
-        ];
+        return $parameters;
     }
 
     /**
@@ -209,11 +203,10 @@ class HttpClient
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
         $body = '';
+        $url  = $this->url . $endpoint;
 
         // Setup authentication.
-        $auth       = $this->authenticate($endpoint, $method, $parameters);
-        $url        = $auth['url'];
-        $parameters = $auth['parameters'];
+        $parameters = $this->authenticate($url, $method, $parameters);
 
         // Setup method.
         $this->setupMethod($method);
@@ -224,7 +217,7 @@ class HttpClient
             \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
         }
 
-        $this->request = new Request($url, $method, $parameters, $this->getRequestHeaders(), $body);
+        $this->request = new Request($this->buildUrlQuery($url, $parameters), $method, $parameters, $this->getRequestHeaders(), $body);
 
         return $this->getRequest();
     }
