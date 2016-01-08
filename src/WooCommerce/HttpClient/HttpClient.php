@@ -248,17 +248,16 @@ class HttpClient
             case 'POST':
                 $body = \json_encode($data);
                 \curl_setopt($this->ch, CURLOPT_POST, true);
-                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getBody());
+                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
                 break;
             case 'PUT':
                 $body = \json_encode($data);
                 \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getBody());
+                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
                 break;
             case 'DELETE':
                 $body = '';
                 \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request->getBody());
                 break;
 
             default:
