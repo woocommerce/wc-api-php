@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Automattic\\WooCommerce\\": ["src"]
+      "Automattic\\WooCommerce\\": ["src/WooCommerce"]
     }
   }
 }
