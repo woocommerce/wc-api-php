@@ -9,10 +9,11 @@
 namespace Automattic\WooCommerce\HttpClient;
 
 use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\HttpClientException;
 use Automattic\WooCommerce\HttpClient\OAuth;
+use Automattic\WooCommerce\HttpClient\Options;
 use Automattic\WooCommerce\HttpClient\Request;
 use Automattic\WooCommerce\HttpClient\Response;
-use Automattic\WooCommerce\HttpClient\HttpClientException;
 
 /**
  * REST API HTTP Client class.
@@ -21,16 +22,6 @@ use Automattic\WooCommerce\HttpClient\HttpClientException;
  */
 class HttpClient
 {
-
-    /**
-     * Default WooCommerce REST API version.
-     */
-    const VERSION = 'v3';
-
-    /**
-     * Default request timeout.
-     */
-    const TIMEOUT = 15;
 
     /**
      * cURL handle.
@@ -59,41 +50,6 @@ class HttpClient
      * @var string
      */
     protected $consumerSecret;
-
-    /**
-     * WooCommerce REST API version.
-     *
-     * @var string
-     */
-    protected $version;
-
-    /**
-     * If is under SSL.
-     *
-     * @var bool
-     */
-    protected $isSsl;
-
-    /**
-     * If need verify SSL.
-     *
-     * @var bool
-     */
-    protected $verifySsl;
-
-    /**
-     * Requests timeout.
-     *
-     * @var int
-     */
-    protected $timeout;
-
-    /**
-     * Basic authentication as query string.
-     *
-     * @var bool
-     */
-    protected $queryStringAuth;
 
     /**
      * Request.
@@ -130,38 +86,20 @@ class HttpClient
             throw new HttpClientException('cURL is NOT installed on this server', -1, new Request(), new Response());
         }
 
-        $this->version         = $this->getVersion($options);
-        $this->isSsl           = $this->isSsl($url);
-        $this->url             = $this->buildApiUrl($url);
-        $this->consumerKey     = $consumerKey;
-        $this->consumerSecret  = $consumerSecret;
-        $this->verifySsl       = $this->verifySsl($options);
-        $this->timeout         = $this->getTimeout($options);
-        $this->queryStringAuth = $this->isQueryStringAuth($options);
-    }
-
-    /**
-     * Get API version.
-     *
-     * @param array $options Client options.
-     *
-     * @return string
-     */
-    protected function getVersion($options)
-    {
-        return isset($options['version']) ? $options['version'] : self::VERSION;
+        $this->options        = new Options($options);
+        $this->url            = $this->buildApiUrl($url);
+        $this->consumerKey    = $consumerKey;
+        $this->consumerSecret = $consumerSecret;
     }
 
     /**
      * Check if is under SSL.
      *
-     * @param string $url Store URL.
-     *
      * @return bool
      */
-    protected function isSsl($url)
+    protected function isSsl()
     {
-        return 'https://' === \substr($url, 0, 8);
+        return 'https://' === \substr($this->url, 0, 8);
     }
 
     /**
@@ -173,44 +111,7 @@ class HttpClient
      */
     protected function buildApiUrl($url)
     {
-        return \rtrim($url, '/') . '/wc-api/' . $this->version . '/';
-    }
-
-    /**
-     * Check if need to verify SSL.
-     *
-     * @param array $options Client options.
-     *
-     * @return bool
-     */
-    protected function verifySsl($options)
-    {
-        return isset($options['verify_ssl']) ? (bool) $options['verify_ssl'] : true;
-    }
-
-    /**
-     * Get timeout.
-     *
-     * @param array $options Client options.
-     *
-     * @return int
-     */
-    protected function getTimeout($options)
-    {
-        return isset($options['timeout']) ? (int) $options['timeout'] : self::TIMEOUT;
-    }
-
-    /**
-     * Basic Authentication as query string.
-     * Some old servers are not able to use CURLOPT_USERPWD.
-     *
-     * @param array $options Client options.
-     *
-     * @return bool
-     */
-    protected function isQueryStringAuth($options)
-    {
-        return isset($options['query_string_auth']) ? (bool) $options['query_string_auth'] : false;
+        return \rtrim($url, '/') . '/wc-api/' . $this->options->getVersion() . '/';
     }
 
     /**
@@ -228,16 +129,16 @@ class HttpClient
         $url = $this->url . $endpoint;
 
         // Setup authentication.
-        if ($this->isSsl) {
+        if ($this->isSsl()) {
             // Set query string for authentication.
-            if ($this->queryStringAuth) {
+            if ($this->options->isQueryStringAuth()) {
                 $parameters['consumer_key']    = $this->consumerKey;
                 $parameters['consumer_secret'] = $this->consumerSecret;
             } else {
                 \curl_setopt($this->ch, CURLOPT_USERPWD, $this->consumerKey . ':' . $this->consumerSecret);
             }
         } else {
-            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->version, $method, $parameters);
+            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->options->getVersion(), $method, $parameters);
             $parameters = $oAuth->getParameters();
         }
 
@@ -346,7 +247,7 @@ class HttpClient
 
         // Set response headers.
         $this->responseHeaders = '';
-        \curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function($_, $headers) {
+        \curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function ($_, $headers) {
             $this->responseHeaders .= $headers;
             return \strlen($headers);
         });
@@ -374,6 +275,9 @@ class HttpClient
      */
     public function request($endpoint, $method, $data = [], $parameters = [])
     {
+        $verifySsl = $this->options->verifySsl();
+        $timeout   = $this->options->getTimeout();
+
         // Initialize cURL.
         $this->ch = \curl_init();
 
@@ -381,10 +285,10 @@ class HttpClient
         $request = $this->createRequest($endpoint, $method, $data, $parameters);
 
         // Default cURL settings.
-        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $this->verifySsl);
-        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $this->verifySsl);
-        \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
-        \curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
+        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $verifySsl);
+        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $verifySsl);
+        \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        \curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         \curl_setopt($this->ch, CURLOPT_HTTPHEADER, $request->getRawHeaders());
         \curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
@@ -413,7 +317,8 @@ class HttpClient
      * @param Request  $request        Request data.
      * @param Response $response       Response data.
      */
-    protected function lookForErrors($parsedResponse, $request, $response) {
+    protected function lookForErrors($parsedResponse, $request, $response)
+    {
         // Test if return a valid JSON.
         if (null === $parsedResponse) {
             throw new HttpClientException('Invalid JSON returned', $response->getCode(), $request, $response);
