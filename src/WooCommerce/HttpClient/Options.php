@@ -46,49 +46,41 @@ class Options
     /**
      * Get API version.
      *
-     * @param array $options Client options.
-     *
      * @return string
      */
-    public function getVersion($options)
+    public function getVersion()
     {
-        return isset($options['version']) ? $options['version'] : self::VERSION;
+        return isset($this->options['version']) ? $this->options['version'] : self::VERSION;
     }
 
     /**
      * Check if need to verify SSL.
      *
-     * @param array $options Client options.
-     *
      * @return bool
      */
-    public function verifySsl($options)
+    public function verifySsl()
     {
-        return isset($options['verify_ssl']) ? (bool) $options['verify_ssl'] : true;
+        return isset($this->options['verify_ssl']) ? (bool) $this->options['verify_ssl'] : true;
     }
 
     /**
      * Get timeout.
      *
-     * @param array $options Client options.
-     *
      * @return int
      */
-    public function getTimeout($options)
+    public function getTimeout()
     {
-        return isset($options['timeout']) ? (int) $options['timeout'] : self::TIMEOUT;
+        return isset($this->options['timeout']) ? (int) $this->options['timeout'] : self::TIMEOUT;
     }
 
     /**
      * Basic Authentication as query string.
      * Some old servers are not able to use CURLOPT_USERPWD.
      *
-     * @param array $options Client options.
-     *
      * @return bool
      */
-    public function isQueryStringAuth($options)
+    public function isQueryStringAuth()
     {
-        return isset($options['query_string_auth']) ? (bool) $options['query_string_auth'] : false;
+        return isset($this->options['query_string_auth']) ? (bool) $this->options['query_string_auth'] : false;
     }
 }
