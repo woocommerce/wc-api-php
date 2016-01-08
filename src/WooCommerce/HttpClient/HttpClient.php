@@ -54,7 +54,7 @@ class HttpClient
     /**
      * Client options.
      *
-     * @var array
+     * @var Options
      */
     protected $options;
 
