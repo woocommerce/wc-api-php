@@ -52,6 +52,13 @@ class HttpClient
     protected $consumerSecret;
 
     /**
+     * Client options.
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Request.
      *
      * @var Request
