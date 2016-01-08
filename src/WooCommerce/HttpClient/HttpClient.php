@@ -253,23 +253,12 @@ class HttpClient
     }
 
     /**
-     * Create request.
+     * Setup method.
      *
-     * @param string $endpoint   Request endpoint.
-     * @param string $method     Request method.
-     * @param array  $data       Request data.
-     * @param array  $parameters Request parameters.
-     *
-     * @return Request
+     * @param string $method Request method.
      */
-    protected function createRequest($endpoint, $method, $data = [], $parameters = [])
+    protected function setupMethod($method)
     {
-        $body       = '';
-        $auth       = $this->authenticate($endpoint, $method, $parameters);
-        $url        = $auth['url'];
-        $parameters = $auth['parameters'];
-
-        // Setup method.
         switch ($method) {
             case 'POST':
                 \curl_setopt($this->ch, CURLOPT_POST, true);
@@ -281,6 +270,29 @@ class HttpClient
                 \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                 break;
         }
+    }
+
+    /**
+     * Create request.
+     *
+     * @param string $endpoint   Request endpoint.
+     * @param string $method     Request method.
+     * @param array  $data       Request data.
+     * @param array  $parameters Request parameters.
+     *
+     * @return Request
+     */
+    protected function createRequest($endpoint, $method, $data = [], $parameters = [])
+    {
+        $body = '';
+
+        // Setup authentication.
+        $auth       = $this->authenticate($endpoint, $method, $parameters);
+        $url        = $auth['url'];
+        $parameters = $auth['parameters'];
+
+        // Setup method.
+        $this->setupMethod($method);
 
         // Include post fields.
         if (!empty($data)) {
