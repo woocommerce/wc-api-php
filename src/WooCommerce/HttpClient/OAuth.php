@@ -70,7 +70,7 @@ class OAuth
      * @param string $consumerKey    Consumer key.
      * @param string $consumerSecret Consumer Secret.
      * @param string $method         Request method.
-     * @param string $parameters     Request parameters.
+     * @param array  $parameters     Request parameters.
      */
     public function __construct($url, $consumerKey, $consumerSecret, $apiVersion, $method, $parameters = [])
     {
