@@ -126,6 +126,10 @@ class HttpClient
      */
     public function __construct($url, $consumerKey, $consumerSecret, $options)
     {
+        if (!\function_exists('curl_version')) {
+            throw new HttpClientException('cURL is NOT installed on this server', -1, new Request(), new Response());
+        }
+
         $this->version         = $this->getVersion($options);
         $this->isSsl           = $this->isSsl($url);
         $this->url             = $this->buildApiUrl($url);
@@ -210,16 +214,15 @@ class HttpClient
     }
 
     /**
-     * Create request.
+     * Authenticate.
      *
      * @param string $endpoint   Request endpoint.
      * @param string $method     Request method.
-     * @param array  $data       Request data.
      * @param array  $parameters Request parameters.
      *
-     * @return Request
+     * @return array
      */
-    protected function createRequest($endpoint, $method, $data = [], $parameters = [])
+    protected function authenticate($endpoint, $method, $parameters = [])
     {
         // Build URL.
         $url = $this->url . $endpoint;
@@ -242,6 +245,28 @@ class HttpClient
         if (!empty($parameters)) {
             $url .= '?' . \http_build_query($parameters);
         }
+
+        return [
+            'url'        => $url,
+            'parameters' => $parameters,
+        ];
+    }
+
+    /**
+     * Create request.
+     *
+     * @param string $endpoint   Request endpoint.
+     * @param string $method     Request method.
+     * @param array  $data       Request data.
+     * @param array  $parameters Request parameters.
+     *
+     * @return Request
+     */
+    protected function createRequest($endpoint, $method, $data = [], $parameters = [])
+    {
+        $auth       = $this->authenticate($endpoint, $method, $parameters = []);
+        $url        = $auth['url'];
+        $parameters = $auth['parameters'];
 
         // Setup method.
         switch ($method) {
@@ -311,7 +336,7 @@ class HttpClient
 
         // Set response headers.
         $this->responseHeaders = '';
-        \curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function ($_, $headers) {
+        \curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function($_, $headers) {
             $this->responseHeaders .= $headers;
             return \strlen($headers);
         });
@@ -339,10 +364,6 @@ class HttpClient
      */
     public function request($endpoint, $method, $data = [], $parameters = [])
     {
-        if (!\function_exists('curl_version')) {
-            throw new HttpClientException('cURL is NOT installed on this server', -1, new Request(), new Response());
-        }
-
         // Initialize cURL.
         $this->ch = \curl_init();
 
@@ -370,6 +391,19 @@ class HttpClient
 
         $parsedResponse = $this->decodeResponseBody($response->getBody());
 
+        $this->lookForErrors($parsedResponse, $request, $response);
+
+        return $parsedResponse;
+    }
+
+    /**
+     * Look for errors in the request.
+     *
+     * @param array    $parsedResponse Parsed body response.
+     * @param Request  $request        Request data.
+     * @param Response $response       Response data.
+     */
+    protected function lookForErrors($parsedResponse, $request, $response) {
         // Test if return a valid JSON.
         if (null === $parsedResponse) {
             throw new HttpClientException('Invalid JSON returned', $response->getCode(), $request, $response);
@@ -387,8 +421,6 @@ class HttpClient
 
             throw new HttpClientException(\sprintf('Error: %s [%s]', $errorMessage, $errorCode), $response->getCode(), $request, $response);
         }
-
-        return $parsedResponse;
     }
 
     /**
