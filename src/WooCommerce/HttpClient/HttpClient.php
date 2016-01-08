@@ -227,7 +227,7 @@ class HttpClient
      *
      * @return array
      */
-    public function getResponseHeaders()
+    protected function getResponseHeaders()
     {
         $headers = [];
         $lines   = \explode("\n", $this->responseHeaders);
