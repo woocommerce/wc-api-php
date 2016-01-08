@@ -24,10 +24,10 @@
   },
   "autoload": {
     "psr-4": {
-      "Automattic\\WooCommerce\\": ["src/"]
+      "Automattic\\WooCommerce\\": ["src/WooCommerce"]
     }
   },
   "autoload-dev": {
-    "psr-4": { "Automattic\\WooCommerce\\Tests\\": "tests/" }
+    "psr-4": { "Automattic\\WooCommerce\\Tests\\": "tests/WooCommerce" }
   }
 }
