@@ -117,6 +117,43 @@ class OAuth
     }
 
     /**
+     * Process filters.
+     *
+     * @param array $parameters Request parameters.
+     *
+     * @return array
+     */
+    protected function processFilters($parameters)
+    {
+        if (isset($parameters['filter'])) {
+            $filters = $parameters['filter'];
+            unset($parameters['filter']);
+            foreach ($filters as $filter => $value) {
+                $parameters['filter[' . $filter . ']'] = $value;
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Get secret.
+     *
+     * @return string
+     */
+    protected function getSecret()
+    {
+        $secret = $this->consumerSecret;
+
+        // Fix secret for v3 or later.
+        if (3 <= \str_replace('v', '', $this->apiVersion)) {
+            $secret .= '&';
+        }
+
+        return $secret;
+    }
+
+    /**
      * Generate oAuth1.0 signature.
      *
      * @param array $parameters Request parameters including oauth.
@@ -127,13 +164,8 @@ class OAuth
     {
         $baseRequestUri = \rawurlencode($this->url);
 
-        if (isset($parameters['filter'])) {
-            $filters = $parameters['filter'];
-            unset($parameters['filter']);
-            foreach ($filters as $filter => $value) {
-                $parameters['filter[' . $filter . ']'] = $value;
-            }
-        }
+        // Extract filters.
+        $parameters = $this->processFilters($parameters);
 
         // Normalize parameter key/values and sort them.
         $parameters = $this->normalizeParameters($parameters);
@@ -147,12 +179,7 @@ class OAuth
 
         $queryString  = \implode('%26', $query); // Join with ampersand.
         $stringToSign = $this->method . '&' . $baseRequestUri . '&' . $queryString;
-        $secret       = $this->consumerSecret;
-
-        // Fix secret for v3 or later.
-        if (3 <= \str_replace('v', '', $this->apiVersion)) {
-            $secret .= '&';
-        }
+        $secret       = $this->getSecret();
 
         return \base64_encode(\hash_hmac(self::HASH_ALGORITHM, $stringToSign, $secret, true));
     }
