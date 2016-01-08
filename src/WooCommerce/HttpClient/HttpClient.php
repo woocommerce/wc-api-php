@@ -264,7 +264,7 @@ class HttpClient
      */
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
-        $auth       = $this->authenticate($endpoint, $method, $parameters = []);
+        $auth       = $this->authenticate($endpoint, $method, $parameters);
         $url        = $auth['url'];
         $parameters = $auth['parameters'];
 
