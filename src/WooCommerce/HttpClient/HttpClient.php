@@ -9,6 +9,7 @@
 namespace Automattic\WooCommerce\HttpClient;
 
 use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\BasicAuth;
 use Automattic\WooCommerce\HttpClient\HttpClientException;
 use Automattic\WooCommerce\HttpClient\OAuth;
 use Automattic\WooCommerce\HttpClient\Options;
@@ -154,13 +155,8 @@ class HttpClient
 
         // Setup authentication.
         if ($this->isSsl()) {
-            // Set query string for authentication.
-            if ($this->options->isQueryStringAuth()) {
-                $parameters['consumer_key']    = $this->consumerKey;
-                $parameters['consumer_secret'] = $this->consumerSecret;
-            } else {
-                \curl_setopt($this->ch, CURLOPT_USERPWD, $this->consumerKey . ':' . $this->consumerSecret);
-            }
+            $basicAuth  = new BasicAuth($this->ch, $this->consumerKey, $this->consumerSecret, $this->options->isQueryStringAuth(), $parameters);
+            $parameters = $basicAuth->getParameters();
         } else {
             $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->options->getVersion(), $method, $parameters);
             $parameters = $oAuth->getParameters();
