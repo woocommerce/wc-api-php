@@ -39,7 +39,7 @@ class BasicAuth
     /**
      * Do query string auth.
      *
-     * @var string
+     * @var bool
      */
     protected $doQueryString;
 
