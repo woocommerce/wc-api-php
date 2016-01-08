@@ -281,7 +281,9 @@ class HttpClient
         $timeout   = $this->options->getTimeout();
 
         \curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $verifySsl);
-        \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $verifySsl);
+        if (!$verifySsl) {
+            \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $verifySsl);
+        }
         \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
