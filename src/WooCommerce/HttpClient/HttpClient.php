@@ -264,6 +264,7 @@ class HttpClient
      */
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
+        $body       = '';
         $auth       = $this->authenticate($endpoint, $method, $parameters);
         $url        = $auth['url'];
         $parameters = $auth['parameters'];
@@ -271,23 +272,20 @@ class HttpClient
         // Setup method.
         switch ($method) {
             case 'POST':
-                $body = \json_encode($data);
                 \curl_setopt($this->ch, CURLOPT_POST, true);
-                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
                 break;
             case 'PUT':
-                $body = \json_encode($data);
                 \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
                 break;
             case 'DELETE':
-                $body = '';
                 \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                 break;
+        }
 
-            default:
-                $body = '';
-                break;
+        // Include post fields.
+        if (!empty($data)) {
+            $body = \json_encode($data);
+            \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
         }
 
         // Setup headers.
