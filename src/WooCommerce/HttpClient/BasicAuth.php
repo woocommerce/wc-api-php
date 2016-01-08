@@ -53,12 +53,13 @@ class BasicAuth
     /**
      * Initialize Basic Authentication class.
      *
-     * @param string $consumerKey    Consumer key.
-     * @param string $consumerSecret Consumer Secret.
-     * @param bool   $doQueryString  Do or not query string auth.
-     * @param array  $parameters     Request parameters.
+     * @param resource $ch             cURL handle.
+     * @param string   $consumerKey    Consumer key.
+     * @param string   $consumerSecret Consumer Secret.
+     * @param bool     $doQueryString  Do or not query string auth.
+     * @param array    $parameters     Request parameters.
      */
-    public function __construct($ch, $consumerKey, $consumerSecret, $doQueryString, $parameters)
+    public function __construct($ch, $consumerKey, $consumerSecret, $doQueryString, $parameters = [])
     {
         $this->ch             = $ch;
         $this->consumerKey    = $consumerKey;
