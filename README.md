@@ -31,21 +31,21 @@ $woocommerce = new Client(
 
 ### Options
 
-|       Option      |   Type   | Required |               Description                |
-| ----------------- | -------- | -------- | ---------------------------------------- |
-| `url`             | `string` | yes      | Your Store URL, example: http://woo.dev/ |
-| `consumer_key`    | `string` | yes      | Your API consumer key                    |
-| `consumer_secret` | `string` | yes      | Your API consumer secret                 |
+|       Option      |   Type   | Required |                Description                 |
+| ----------------- | -------- | -------- | ------------------------------------------ |
+| `url`             | `string` | yes      | Your Store URL, example: http://woo.dev/   |
+| `consumer_key`    | `string` | yes      | Your API consumer key                      |
+| `consumer_secret` | `string` | yes      | Your API consumer secret                   |
 | `options`         | `array`  | no       | Extra arguments (see client options table) |
 
 #### Client options
 
-|        Option       |   Type   | Required |                                             Description                                             |
-| ------------------- | -------- | -------- | --------------------------------------------------------------------------------------------------- |
-| `version`           | `string` | no       | API version, default is `v3`                                                                        |
-| `timeout`           | `int`    | no       | Request timeout                                                                                     |
-| `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates |
-| `query_string_auth` | `bool`   | no       | When `true` and using under HTTPS force Basic Authentication as query string                        |
+|        Option       |   Type   | Required |                                                      Description                                                       |
+| ------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `version`           | `string` | no       | API version, default is `v3`                                                                                           |
+| `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
+| `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
+| `query_string_auth` | `bool`   | no       | When `true` and using under HTTPS force Basic Authentication as query string, default is `false`                       |
 
 ## Methods
 
