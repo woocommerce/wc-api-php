@@ -2,6 +2,10 @@
 
 A PHP wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API using this library.
 
+[![build status](https://secure.travis-ci.org/woothemes/wc-api-php.svg)](http://travis-ci.org/woothemes/wc-api-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/woothemes/wc-api-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/woothemes/wc-api-php/?branch=master)
+[![PHP version](https://badge.fury.io/ph/automattic%2Fwoocommerce.svg)](https://packagist.org/packages/automattic/woocommerce)
+
 ## Installation
 
 ```
