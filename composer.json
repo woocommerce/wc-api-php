@@ -2,7 +2,7 @@
   "name": "automattic/woocommerce",
   "description": "A PHP wrapper for the WooCommerce REST API",
   "type": "library",
-  "license": "GPL v3",
+  "license": "MIT",
   "authors": [
     {
       "name": "Claudio Sanches",
