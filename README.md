@@ -57,16 +57,62 @@ $woocommerce = new Client(
 
 ### GET
 
-- `$woocommerce->get($endpoint, $parameters = [])`
+```php
+$woocommerce->get($endpoint, $parameters = [])
+```
 
 ### POST
 
-- `$woocommerce->post($endpoint, $data)`
+```php
+$woocommerce->post($endpoint, $data)
+```
 
 ### PUT
 
-- `$woocommerce->put($endpoint, $data)`
+```php
+$woocommerce->put($endpoint, $data)
+```
 
 ### DELETE
 
-- `$woocommerce->delete($endpoint, $parameters = [])`
+```php
+$woocommerce->delete($endpoint, $parameters = [])
+```
+
+#### Response
+
+All methods will return arrays on success or throwing `HttpClientException` errors on failure.
+
+
+```php
+use Automattic\WooCommerce\HttpClient\HttpClientException;
+
+try {
+    // Array of response results.
+    $results = $woocommerce->get('customers');
+    // Example: ['customers' => [[ 'id' => 8, 'created_at' => '2015-05-06T17:43:51Z', 'email' => ...
+
+    // Last request data.
+    $lastRequest = $woocommerce->http->getRequest();
+    $lastRequest->getUrl() // Requested URL (string).
+    $lastRequest->getMethod() // Request method (string).
+    $lastRequest->getParameters() // Request parameters (array).
+    $lastRequest->getHeaders() // Request headers (array).
+    $lastRequest->getBody() // Request body (JSON).
+
+    // Last response data.
+    $lastResponse = $woocommerce->http->getResponse();
+    $lastResponse->getCode(); // Response code (int).
+    $lastResponse->getHeaders(); // Response headers (array).
+    $lastResponse->getBody(); // Response body (JSON).
+
+} catch (HttpClientException $e) {
+    $e->getMessage() // Error message.
+    $e->getRequest() // Last request data.
+    $e->getResponse() // Last response data.
+}
+```
+
+## Release History
+
+- 2016-01-11 - 1.0.0 - Stable release.
