@@ -97,7 +97,7 @@ class OAuth
     /**
      * Normalize parameters.
      *
-     * @param array $parameters Parameters to marnalize.
+     * @param array $parameters Parameters to normalize.
      *
      * @return array
      */
@@ -185,6 +185,26 @@ class OAuth
     }
 
     /**
+     * Sort parameters.
+     *
+     * @param array $parameters Parameters to sort in byte-order.
+     *
+     * @return array
+     */
+    protected function getSortedParameters($parameters)
+    {
+        \uksort($parameters, 'strcmp');
+
+        foreach ($parameters as $key => $value) {
+            if (\is_array($value)) {
+                \uksort($parameters[$key], 'strcmp');
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
      * Get oAuth1.0 parameters.
      *
      * @return string
@@ -201,6 +221,6 @@ class OAuth
         // The parameters above must be included in the signature generation.
         $parameters['oauth_signature'] = $this->generateOauthSignature($parameters);
 
-        return $parameters;
+        return $this->getSortedParameters($parameters);
     }
 }
