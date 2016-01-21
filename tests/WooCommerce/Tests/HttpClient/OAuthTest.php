@@ -22,10 +22,10 @@ class OAuthTest extends TestCase
         $parameters = $this->oAuth->getParameters();
         $keys = [
             'oauth_consumer_key',
-            'oauth_timestamp',
             'oauth_nonce',
-            'oauth_signature_method',
             'oauth_signature',
+            'oauth_signature_method',
+            'oauth_timestamp',
         ];
 
         $this->assertEquals($keys, array_keys($parameters));
