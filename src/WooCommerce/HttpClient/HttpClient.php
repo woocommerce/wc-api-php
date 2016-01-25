@@ -327,8 +327,9 @@ class HttpClient
     protected function decodeResponseBody($data)
     {
         // Remove any HTML or text from cache plugins or PHP notices.
-        \preg_match('/\{(?:[^{}]|(?R))*\}/', $data, $matches);
-        $data = isset($matches[0]) ? $matches[0] : '';
+        $json_start = \strpos($data, '{');
+        $json_end   = \strrpos($data, '}') + 1; // Inclusive.
+        $data       = \substr($data, $json_start, ($json_end - $json_start));
 
         return \json_decode($data, true);
     }
