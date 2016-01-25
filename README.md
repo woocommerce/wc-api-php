@@ -119,5 +119,6 @@ try {
 
 ## Release History
 
+- 2016-01-25 - 1.0.2 - Fixed an error when getting data containing non-latin characters.
 - 2016-01-21 - 1.0.1 - Sort all oAuth parameters before build request URLs.
 - 2016-01-11 - 1.0.0 - Stable release.
