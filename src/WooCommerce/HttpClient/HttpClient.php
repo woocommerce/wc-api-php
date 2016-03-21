@@ -234,8 +234,8 @@ class HttpClient
         $lines   = \array_filter($lines, 'trim');
 
         foreach ($lines as $index => $line) {
-            // Remove HTTP/xxx param.
-            if (0 === $index) {
+            // Remove HTTP/xxx params.
+            if (strpos($line, ': ') === false) {
                 continue;
             }
 
