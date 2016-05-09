@@ -21,6 +21,8 @@ Check out the WooCommerce API endpoints and data that can be manipulated in <htt
 
 ## Setup
 
+Standard request for the old WooCommerce API v3:
+
 ```php
 require __DIR__ . '/vendor/autoload.php';
 
@@ -29,7 +31,28 @@ use Automattic\WooCommerce\Client;
 $woocommerce = new Client(
     'http://example.com', 
     'ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 
-    'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    [
+        'version' => 'v3',
+    ],
+);
+```
+
+Example of request for the new WP REST API integration:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Automattic\WooCommerce\Client;
+
+$woocommerce = new Client(
+    'http://example.com', 
+    'ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 
+    'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    [
+        'wp_api' => true,
+        'version' => 'wc/v1',
+    ],
 );
 ```
 
@@ -45,7 +68,8 @@ $woocommerce = new Client(
 #### Client options
 
 |        Option       |   Type   | Required |                                                      Description                                                       |
-| ------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+|---------------------|----------|----------|------------------------------------------------------------------------------------------------------------------------|
+| `wp_api`            | `bool`   | no       | Allow make requests to the new WP REST API integration                                                                 |
 | `version`           | `string` | no       | API version, default is `v3`                                                                                           |
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
@@ -81,6 +105,12 @@ $woocommerce->put($endpoint, $data)
 
 ```php
 $woocommerce->delete($endpoint, $parameters = [])
+```
+
+### OPTIONS
+
+```php
+$woocommerce->options($endpoint)
 ```
 
 #### Response
@@ -119,6 +149,7 @@ try {
 
 ## Release History
 
+- 2016-01-25 - 1.1.0 - Added support for WP REST API and fixed multiple headers responses.
 - 2016-01-25 - 1.0.2 - Fixed an error when getting data containing non-latin characters.
 - 2016-01-21 - 1.0.1 - Sort all oAuth parameters before build request URLs.
 - 2016-01-11 - 1.0.0 - Stable release.
