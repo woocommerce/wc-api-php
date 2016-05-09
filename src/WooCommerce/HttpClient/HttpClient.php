@@ -298,11 +298,6 @@ class HttpClient
      */
     protected function lookForErrors($parsedResponse)
     {
-        // Test if return a valid JSON.
-        if (null === $parsedResponse) {
-            throw new HttpClientException('Invalid JSON returned', $this->response->getCode(), $this->request, $this->response);
-        }
-
         // Any non-200/201/202 response code indicates an error.
         if (!\in_array($this->response->getCode(), ['200', '201', '202'])) {
             if (!empty($parsedResponse['errors'][0])) {
@@ -318,30 +313,19 @@ class HttpClient
     }
 
     /**
-     * Decode response body.
-     *
-     * @param  string $data Response in JSON format.
-     *
-     * @return array
-     */
-    protected function decodeResponseBody($data)
-    {
-        // Remove any HTML or text from cache plugins or PHP notices.
-        $json_start = \strpos($data, '{');
-        $json_end   = \strrpos($data, '}') + 1; // Inclusive.
-        $data       = \substr($data, $json_start, ($json_end - $json_start));
-
-        return \json_decode($data, true);
-    }
-
-    /**
      * Process response.
      *
      * @return array
      */
     protected function processResponse()
     {
-        $parsedResponse = $this->decodeResponseBody($this->response->getBody());
+        $parsedResponse = \json_decode($this->response->getBody(), true);
+
+        // Test if return a valid JSON.
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Invalid JSON returned';
+            throw new HttpClientException($message, $this->response->getCode(), $this->request, $this->response);
+        }
 
         $this->lookForErrors($parsedResponse);
 
