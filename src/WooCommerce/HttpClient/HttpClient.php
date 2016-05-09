@@ -171,7 +171,7 @@ class HttpClient
     {
         if ('POST' == $method) {
             \curl_setopt($this->ch, CURLOPT_POST, true);
-        } else if (\in_array($method, ['PUT', 'DELETE'])) {
+        } else if (\in_array($method, ['PUT', 'DELETE', 'OPTIONS'])) {
             \curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $method);
         }
     }

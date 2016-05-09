@@ -94,4 +94,16 @@ class Client
     {
         return $this->http->request($endpoint, 'DELETE', [], $parameters);
     }
+
+    /**
+     * OPTIONS method.
+     *
+     * @param string $endpoint API endpoint.
+     *
+     * @return array
+     */
+    public function options($endpoint)
+    {
+        return $this->http->request($endpoint, 'OPTIONS', [], []);
+    }
 }
