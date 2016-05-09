@@ -21,7 +21,7 @@ Check out the WooCommerce API endpoints and data that can be manipulated in <htt
 
 ## Setup
 
-Standard request for the old WooCommerce API v3:
+Setup for the old WooCommerce API v3:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
@@ -38,7 +38,7 @@ $woocommerce = new Client(
 );
 ```
 
-Example of request for the new WP REST API integration:
+Setup for the new WP REST API integration:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
