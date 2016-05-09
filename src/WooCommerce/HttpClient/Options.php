@@ -83,4 +83,14 @@ class Options
     {
         return isset($this->options['query_string_auth']) ? (bool) $this->options['query_string_auth'] : false;
     }
+
+    /**
+     * Check if is WP REST API.
+     *
+     * @return bool
+     */
+    public function isWPAPI()
+    {
+        return isset($this->options['wp_api']) ? (bool) $this->options['wp_api'] : false;
+    }
 }

@@ -119,7 +119,9 @@ class HttpClient
      */
     protected function buildApiUrl($url)
     {
-        return \rtrim($url, '/') . '/wc-api/' . $this->options->getVersion() . '/';
+        $api = $this->options->isWPAPI() ? '/wp-json/' : '/wc-api/';
+
+        return \rtrim($url, '/') . $api . $this->options->getVersion() . '/';
     }
 
     /**

@@ -33,4 +33,9 @@ class OptionsTest extends TestCase
     {
         $this->assertFalse($this->options->isQueryStringAuth());
     }
+
+    public function testisWPAPI()
+    {
+        $this->assertFalse($this->options->isWPAPI());
+    }
 }
