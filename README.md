@@ -149,6 +149,7 @@ try {
 
 ## Release History
 
+- 2016-05-10 - 1.1.1 - Fixed oAuth and error handler for WP REST API.
 - 2016-05-09 - 1.1.0 - Added support for WP REST API, added method `Automattic\WooCommerce\Client::options` and fixed multiple headers responses.
 - 2016-01-25 - 1.0.2 - Fixed an error when getting data containing non-latin characters.
 - 2016-01-21 - 1.0.1 - Sort all oAuth parameters before build request URLs.
