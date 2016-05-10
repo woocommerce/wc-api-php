@@ -302,12 +302,14 @@ class HttpClient
     {
         // Any non-200/201/202 response code indicates an error.
         if (!\in_array($this->response->getCode(), ['200', '201', '202'])) {
-            if (!empty($parsedResponse['errors'][0])) {
-                $errorMessage = $parsedResponse['errors'][0]['message'];
-                $errorCode    = $parsedResponse['errors'][0]['code'];
+            $errors = !empty($parsedResponse['errors']) ? $parsedResponse['errors'] : $parsedResponse;
+
+            if (!empty($errors[0])) {
+                $errorMessage = $errors[0]['message'];
+                $errorCode    = $errors[0]['code'];
             } else {
-                $errorMessage = $parsedResponse['errors']['message'];
-                $errorCode    = $parsedResponse['errors']['code'];
+                $errorMessage = $errors['message'];
+                $errorCode    = $errors['code'];
             }
 
             throw new HttpClientException(\sprintf('Error: %s [%s]', $errorMessage, $errorCode), $this->response->getCode(), $this->request, $this->response);
