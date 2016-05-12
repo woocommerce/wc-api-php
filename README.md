@@ -32,9 +32,9 @@ $woocommerce = new Client(
     'http://example.com', 
     'ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 
     'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    [
-        'version' => 'v3',
-    ],
+    array(
+        'version' => 'v3'
+    )
 );
 ```
 
@@ -49,10 +49,10 @@ $woocommerce = new Client(
     'http://example.com', 
     'ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 
     'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    [
-        'wp_api' => true,
-        'version' => 'wc/v1',
-    ],
+        array(
+            'wp_api' => 'true',
+            'version' => 'wc/v1'
+        ),
 );
 ```
 
