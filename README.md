@@ -52,7 +52,7 @@ $woocommerce = new Client(
         array(
             'wp_api' => 'true',
             'version' => 'wc/v1'
-        ),
+        )
 );
 ```
 
