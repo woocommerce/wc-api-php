@@ -34,7 +34,7 @@ $woocommerce = new Client(
     'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
     [
         'version' => 'v3',
-    ],
+    ]
 );
 ```
 
@@ -52,7 +52,7 @@ $woocommerce = new Client(
     [
         'wp_api' => true,
         'version' => 'wc/v1',
-    ],
+    ]
 );
 ```
 
