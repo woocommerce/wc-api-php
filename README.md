@@ -38,7 +38,7 @@ $woocommerce = new Client(
 );
 ```
 
-Setup for the new WP REST API integration:
+Setup for the new WP REST API integration (WooCommerce 2.6 or later):
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
@@ -69,7 +69,7 @@ $woocommerce = new Client(
 
 |        Option       |   Type   | Required |                                                      Description                                                       |
 |---------------------|----------|----------|------------------------------------------------------------------------------------------------------------------------|
-| `wp_api`            | `bool`   | no       | Allow make requests to the new WP REST API integration                                                                 |
+| `wp_api`            | `bool`   | no       | Allow make requests to the new WP REST API integration (WooCommerce 2.6 or later)                                      |
 | `version`           | `string` | no       | API version, default is `v3`                                                                                           |
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
