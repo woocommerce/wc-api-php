@@ -128,11 +128,11 @@ try {
 
     // Last request data.
     $lastRequest = $woocommerce->http->getRequest();
-    $lastRequest->getUrl() // Requested URL (string).
-    $lastRequest->getMethod() // Request method (string).
-    $lastRequest->getParameters() // Request parameters (array).
-    $lastRequest->getHeaders() // Request headers (array).
-    $lastRequest->getBody() // Request body (JSON).
+    $lastRequest->getUrl(); // Requested URL (string).
+    $lastRequest->getMethod(); // Request method (string).
+    $lastRequest->getParameters(); // Request parameters (array).
+    $lastRequest->getHeaders(); // Request headers (array).
+    $lastRequest->getBody(); // Request body (JSON).
 
     // Last response data.
     $lastResponse = $woocommerce->http->getResponse();
@@ -141,9 +141,9 @@ try {
     $lastResponse->getBody(); // Response body (JSON).
 
 } catch (HttpClientException $e) {
-    $e->getMessage() // Error message.
-    $e->getRequest() // Last request data.
-    $e->getResponse() // Last response data.
+    $e->getMessage(); // Error message.
+    $e->getRequest(); // Last request data.
+    $e->getResponse(); // Last response data.
 }
 ```
 
