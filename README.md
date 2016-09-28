@@ -73,7 +73,7 @@ $woocommerce = new Client(
 | `version`           | `string` | no       | API version, default is `v3`                                                                                           |
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
-| `query_string_auth` | `bool`   | no       | When `true` and using under HTTPS force Basic Authentication as query string, default is `false`                       |
+| `query_string_auth` | `bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`                       |
 
 ## Methods
 
