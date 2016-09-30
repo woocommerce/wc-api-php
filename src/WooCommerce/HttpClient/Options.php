@@ -27,6 +27,12 @@ class Options
     const TIMEOUT = 15;
 
     /**
+     * Default WP API prefix.
+     * Including leading and trailing slashes.
+     */
+    const WP_API_PREFIX = '/wp-json/';
+
+    /**
      * Options.
      *
      * @var array
@@ -92,5 +98,15 @@ class Options
     public function isWPAPI()
     {
         return isset($this->options['wp_api']) ? (bool) $this->options['wp_api'] : false;
+    }
+
+    /**
+     * Custom API Prefix for WP API.
+     * 
+     * @return string
+     */
+    public function apiPrefix()
+    {
+        return isset($this->options['api_prefix']) ? $this->options['api_prefix'] : self::WP_API_PREFIX;
     }
 }

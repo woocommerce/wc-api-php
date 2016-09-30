@@ -38,4 +38,9 @@ class OptionsTest extends TestCase
     {
         $this->assertFalse($this->options->isWPAPI());
     }
+
+    public function testDefaultValueOfIsApiPrefix()
+    {
+        $this->assertEquals('/wp-json/', $this->options->apiPrefix());
+    }
 }
