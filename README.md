@@ -70,6 +70,7 @@ $woocommerce = new Client(
 |        Option       |   Type   | Required |                                                      Description                                                       |
 |---------------------|----------|----------|------------------------------------------------------------------------------------------------------------------------|
 | `wp_api`            | `bool`   | no       | Allow make requests to the new WP REST API integration (WooCommerce 2.6 or later)                                      |
+| `wp_api_prefix`     | `string` | no       | Custom WP REST API URL prefix, used to support custom prefixes created with the `rest_url_prefix` filter               |
 | `version`           | `string` | no       | API version, default is `v3`                                                                                           |
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |

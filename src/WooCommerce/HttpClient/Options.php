@@ -102,11 +102,11 @@ class Options
 
     /**
      * Custom API Prefix for WP API.
-     * 
+     *
      * @return string
      */
     public function apiPrefix()
     {
-        return isset($this->options['api_prefix']) ? $this->options['api_prefix'] : self::WP_API_PREFIX;
+        return isset($this->options['wp_api_prefix']) ? $this->options['wp_api_prefix'] : self::WP_API_PREFIX;
     }
 }
