@@ -243,11 +243,7 @@ class HttpClient
 
             list($key, $value) = \explode(': ', $line);
 
-            if(isset($headers[$key])) {
-                $headers[$key] .= ', ' . trim($value);
-            } else {
-                $headers[$key] = trim($value);
-            }
+            $headers[$key] = isset($headers[$key]) ? $headers[$key] .= ', ' . trim($value) : trim($value);
         }
 
         return $headers;
