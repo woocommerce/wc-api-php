@@ -75,6 +75,7 @@ $woocommerce = new Client(
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
 | `query_string_auth` | `bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`                       |
+| `oauth_timestamp`   | `string` | no       | Custom oAuth timestamp, default is `time()`                                                                            |
 
 ## Methods
 
@@ -150,6 +151,7 @@ try {
 
 ## Release History
 
+- 2016-10-26 - 1.1.3 - Allow set `oauth_timestamp` and improved how is handled the response headers.
 - 2016-09-30 - 1.1.2 - Added `wp_api_prefix` option to allow custom WP REST API URL prefix.
 - 2016-05-10 - 1.1.1 - Fixed oAuth and error handler for WP REST API.
 - 2016-05-09 - 1.1.0 - Added support for WP REST API, added method `Automattic\WooCommerce\Client::options` and fixed multiple headers responses.
