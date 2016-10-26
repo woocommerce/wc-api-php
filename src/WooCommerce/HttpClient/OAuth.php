@@ -45,7 +45,7 @@ class OAuth
     /**
      * API version.
      *
-     * @var array
+     * @var string
      */
     protected $apiVersion;
 
