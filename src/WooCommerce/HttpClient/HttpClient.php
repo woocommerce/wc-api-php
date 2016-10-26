@@ -157,7 +157,7 @@ class HttpClient
             $basicAuth  = new BasicAuth($this->ch, $this->consumerKey, $this->consumerSecret, $this->options->isQueryStringAuth(), $parameters);
             $parameters = $basicAuth->getParameters();
         } else {
-            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->options->getVersion(), $method, $parameters);
+            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->options->getVersion(), $method, $parameters, $this->options->oauthTimestamp());
             $parameters = $oAuth->getParameters();
         }
 

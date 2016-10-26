@@ -109,4 +109,14 @@ class Options
     {
         return isset($this->options['wp_api_prefix']) ? $this->options['wp_api_prefix'] : self::WP_API_PREFIX;
     }
+
+    /**
+     * oAuth timestamp.
+     *
+     * @return string
+     */
+    public function oauthTimestamp()
+    {
+        return isset($this->options['oauth_timestamp']) ? $this->options['oauth_timestamp'] : \time();
+    }
 }
