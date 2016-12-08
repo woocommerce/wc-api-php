@@ -183,14 +183,19 @@ class HttpClient
      *
      * @return array
      */
-    protected function getRequestHeaders()
+    protected function getRequestHeaders($type = true)
     {
-        return [
+        // Temporarily changed - @see https://github.com/woocommerce/wc-api-php/issues/68
+        $headers = [
             'Accept'       => 'application/json',
-			// Temporarily removed - @see https://github.com/woocommerce/wc-api-php/issues/68
-     		// 'Content-Type' => 'application/json',
             'User-Agent'   => 'WooCommerce API Client-PHP/' . Client::VERSION,
         ];
+
+        if ($type) {
+            $headers['Content-Type'] = 'application/json';
+        }
+
+        return $headers;
     }
 
     /**
@@ -205,6 +210,7 @@ class HttpClient
      */
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
+        $type = false;
         $body = '';
         $url  = $this->url . $endpoint;
 
@@ -218,9 +224,10 @@ class HttpClient
         if (!empty($data)) {
             $body = \json_encode($data);
             \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
+            $type = true;
         }
 
-        $this->request = new Request($this->buildUrlQuery($url, $parameters), $method, $parameters, $this->getRequestHeaders(), $body);
+        $this->request = new Request($this->buildUrlQuery($url, $parameters), $method, $parameters, $this->getRequestHeaders($type), $body);
 
         return $this->getRequest();
     }
