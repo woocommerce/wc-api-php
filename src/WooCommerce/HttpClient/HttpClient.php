@@ -187,7 +187,8 @@ class HttpClient
     {
         return [
             'Accept'       => 'application/json',
-            'Content-Type' => 'application/json',
+			// Temporarily removed - @see https://github.com/woocommerce/wc-api-php/issues/68
+     		// 'Content-Type' => 'application/json',
             'User-Agent'   => 'WooCommerce API Client-PHP/' . Client::VERSION,
         ];
     }
