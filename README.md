@@ -151,6 +151,7 @@ try {
 
 ## Release History
 
+- 2016-12-14 - 1.1.4 - Fixed WordPress 4.7 compatibility.
 - 2016-10-26 - 1.1.3 - Allow set `oauth_timestamp` and improved how is handled the response headers.
 - 2016-09-30 - 1.1.2 - Added `wp_api_prefix` option to allow custom WP REST API URL prefix.
 - 2016-05-10 - 1.1.1 - Fixed oAuth and error handler for WP REST API.
