@@ -79,11 +79,11 @@ $woocommerce = new Client(
 
 ## Methods
 
-|    Params    |   Type   |                         Description                          |
-| ------------ | -------- | ------------------------------------------------------------ |
-| `endpoint`   | `string` | WooCommerce API endpoint, example: `customers` or `order/12` |
-| `data`       | `array`  | Only for POST and PUT, data that will be converted to JSON   |
-| `parameters` | `array`  | Only for GET and DELETE, request query string                |
+|    Params    |   Type   |                         Description                                 |
+| ------------ | -------- | ------------------------------------------------------------------- |
+| `endpoint`   | `string` | WooCommerce API endpoint, example: `customers` or `order/12`        |
+| `data`       | `array`  | Only for POST, PATCH and PUT, data that will be converted to JSON   |
+| `parameters` | `array`  | Only for GET and DELETE, request query string                       |
 
 ### GET
 
@@ -101,6 +101,12 @@ $woocommerce->post($endpoint, $data)
 
 ```php
 $woocommerce->put($endpoint, $data)
+```
+
+### PATCH
+
+```php
+$woocommerce->patch($endpoint, $data)
 ```
 
 ### DELETE
