@@ -225,7 +225,6 @@ class HttpClient
         if ($hasData) {
             $body = \json_encode($data);
             \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
-            $type = true;
         }
 
         $this->request = new Request($this->buildUrlQuery($url, $parameters), $method, $parameters, $this->getRequestHeaders($hasData), $body);
