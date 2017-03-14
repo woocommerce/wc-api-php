@@ -189,7 +189,7 @@ class HttpClient
     {
         $headers = [
             'Accept'     => 'application/json',
-            'User-Agent' => 'WooCommerce API Client-PHP/' . Client::VERSION,
+            'User-Agent' => $this->options->userAgent() . '/' . Client::VERSION,
         ];
 
         if ($sendData) {
