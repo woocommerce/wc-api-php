@@ -45,7 +45,7 @@ class OAuth
     /**
      * API version.
      *
-     * @var array
+     * @var string
      */
     protected $apiVersion;
 
@@ -64,15 +64,24 @@ class OAuth
     protected $parameters;
 
     /**
+     * Timestamp.
+     *
+     * @var string
+     */
+    protected $timestamp;
+
+    /**
      * Initialize oAuth class.
      *
      * @param string $url            Store URL.
      * @param string $consumerKey    Consumer key.
      * @param string $consumerSecret Consumer Secret.
      * @param string $method         Request method.
+     * @param string $apiVersion     API version.
      * @param array  $parameters     Request parameters.
+     * @param string $timestamp      Timestamp.
      */
-    public function __construct($url, $consumerKey, $consumerSecret, $apiVersion, $method, $parameters = [])
+    public function __construct($url, $consumerKey, $consumerSecret, $apiVersion, $method, $parameters = [], $timestamp = '')
     {
         $this->url            = $url;
         $this->consumerKey    = $consumerKey;
@@ -80,6 +89,7 @@ class OAuth
         $this->apiVersion     = $apiVersion;
         $this->method         = $method;
         $this->parameters     = $parameters;
+        $this->timestamp      = $timestamp;
     }
 
     /**
@@ -213,7 +223,7 @@ class OAuth
     {
         $parameters = \array_merge($this->parameters, [
             'oauth_consumer_key'     => $this->consumerKey,
-            'oauth_timestamp'        => \time(),
+            'oauth_timestamp'        => $this->timestamp,
             'oauth_nonce'            => \sha1(\microtime()),
             'oauth_signature_method' => 'HMAC-' . self::HASH_ALGORITHM,
         ]);

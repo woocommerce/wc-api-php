@@ -157,7 +157,7 @@ class HttpClient
             $basicAuth  = new BasicAuth($this->ch, $this->consumerKey, $this->consumerSecret, $this->options->isQueryStringAuth(), $parameters);
             $parameters = $basicAuth->getParameters();
         } else {
-            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->options->getVersion(), $method, $parameters);
+            $oAuth      = new OAuth($url, $this->consumerKey, $this->consumerSecret, $this->options->getVersion(), $method, $parameters, $this->options->oauthTimestamp());
             $parameters = $oAuth->getParameters();
         }
 
@@ -181,18 +181,19 @@ class HttpClient
     /**
      * Get request headers.
      *
+     * @param  bool $sendData If request send data or not.
+     *
      * @return array
      */
-    protected function getRequestHeaders($type = true)
+    protected function getRequestHeaders($sendData = false)
     {
-        // Temporarily changed - @see https://github.com/woocommerce/wc-api-php/issues/68
         $headers = [
-            'Accept'       => 'application/json',
-            'User-Agent'   => $this->options->userAgent() . '/' . Client::VERSION,
+            'Accept'     => 'application/json',
+            'User-Agent' => 'WooCommerce API Client-PHP/' . Client::VERSION,
         ];
 
-        if ($type) {
-            $headers['Content-Type'] = 'application/json';
+        if ($sendData) {
+            $headers['Content-Type'] = 'application/json;charset=utf-8';
         }
 
         return $headers;
@@ -210,9 +211,9 @@ class HttpClient
      */
     protected function createRequest($endpoint, $method, $data = [], $parameters = [])
     {
-        $type = false;
-        $body = '';
-        $url  = $this->url . $endpoint;
+        $body    = '';
+        $url     = $this->url . $endpoint;
+        $hasData = !empty($data);
 
         // Setup authentication.
         $parameters = $this->authenticate($url, $method, $parameters);
@@ -221,13 +222,13 @@ class HttpClient
         $this->setupMethod($method);
 
         // Include post fields.
-        if (!empty($data)) {
+        if ($hasData) {
             $body = \json_encode($data);
             \curl_setopt($this->ch, CURLOPT_POSTFIELDS, $body);
             $type = true;
         }
 
-        $this->request = new Request($this->buildUrlQuery($url, $parameters), $method, $parameters, $this->getRequestHeaders($type), $body);
+        $this->request = new Request($this->buildUrlQuery($url, $parameters), $method, $parameters, $this->getRequestHeaders($hasData), $body);
 
         return $this->getRequest();
     }
@@ -250,7 +251,8 @@ class HttpClient
             }
 
             list($key, $value) = \explode(': ', $line);
-            $headers[$key] = $value;
+
+            $headers[$key] = isset($headers[$key]) ? $headers[$key] . ', ' . trim($value) : trim($value);
         }
 
         return $headers;
