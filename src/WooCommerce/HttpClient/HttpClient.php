@@ -188,7 +188,7 @@ class HttpClient
         // Temporarily changed - @see https://github.com/woocommerce/wc-api-php/issues/68
         $headers = [
             'Accept'       => 'application/json',
-            'User-Agent'   => 'WooCommerce API Client-PHP/' . Client::VERSION,
+            'User-Agent'   => $this->options->userAgent() . '/' . Client::VERSION,
         ];
 
         if ($type) {
