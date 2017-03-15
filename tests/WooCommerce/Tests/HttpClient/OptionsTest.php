@@ -43,4 +43,9 @@ class OptionsTest extends TestCase
     {
         $this->assertEquals('/wp-json/', $this->options->apiPrefix());
     }
+
+    public function testDefaultValueOfUserAgent()
+    {
+        $this->assertEquals('WooCommerce API Client-PHP', $this->options->userAgent());
+    }
 }

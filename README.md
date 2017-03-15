@@ -1,6 +1,6 @@
 # WooCommerce API - PHP Client
 
-A PHP wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API using this library.
+A PHP wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API securely using this library. If using a HTTPS connection this library uses BasicAuth, else it uses Oauth to provide a secure connection to WooCommerce.
 
 [![build status](https://secure.travis-ci.org/woocommerce/wc-api-php.svg)](http://travis-ci.org/woocommerce/wc-api-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/woocommerce/wc-api-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/woocommerce/wc-api-php/?branch=master)
@@ -70,10 +70,12 @@ $woocommerce = new Client(
 |        Option       |   Type   | Required |                                                      Description                                                       |
 |---------------------|----------|----------|------------------------------------------------------------------------------------------------------------------------|
 | `wp_api`            | `bool`   | no       | Allow make requests to the new WP REST API integration (WooCommerce 2.6 or later)                                      |
+| `wp_api_prefix`     | `string` | no       | Custom WP REST API URL prefix, used to support custom prefixes created with the `rest_url_prefix` filter               |
 | `version`           | `string` | no       | API version, default is `v3`                                                                                           |
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
 | `query_string_auth` | `bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`                       |
+| `oauth_timestamp`   | `string` | no       | Custom oAuth timestamp, default is `time()`                                                                            |
 
 ## Methods
 
@@ -149,6 +151,9 @@ try {
 
 ## Release History
 
+- 2016-12-14 - 1.1.4 - Fixed WordPress 4.7 compatibility.
+- 2016-10-26 - 1.1.3 - Allow set `oauth_timestamp` and improved how is handled the response headers.
+- 2016-09-30 - 1.1.2 - Added `wp_api_prefix` option to allow custom WP REST API URL prefix.
 - 2016-05-10 - 1.1.1 - Fixed oAuth and error handler for WP REST API.
 - 2016-05-09 - 1.1.0 - Added support for WP REST API, added method `Automattic\WooCommerce\Client::options` and fixed multiple headers responses.
 - 2016-01-25 - 1.0.2 - Fixed an error when getting data containing non-latin characters.
