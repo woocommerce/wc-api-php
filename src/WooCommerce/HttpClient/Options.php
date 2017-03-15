@@ -33,6 +33,12 @@ class Options
     const WP_API_PREFIX = '/wp-json/';
 
     /**
+     * Default User Agent.
+     * No version number.
+     */
+    const USER_AGENT = 'WooCommerce API Client-PHP';
+
+    /**
      * Options.
      *
      * @var array
@@ -118,5 +124,15 @@ class Options
     public function oauthTimestamp()
     {
         return isset($this->options['oauth_timestamp']) ? $this->options['oauth_timestamp'] : \time();
+    }
+
+    /**
+     * Custom user agent.
+     * 
+     * @return string
+     */
+    public function userAgent()
+    {
+        return isset($this->options['user_agent']) ? $this->options['user_agent'] : self::USER_AGENT;
     }
 }
