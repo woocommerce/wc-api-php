@@ -332,7 +332,13 @@ class HttpClient
      */
     protected function processResponse()
     {
-        $parsedResponse = \json_decode($this->response->getBody(), true);
+        $body = $this->response->getBody();
+
+        if (0 === strpos(bin2hex($body), 'efbbbf')) {
+           $body = substr($body, 3);
+        }
+
+        $parsedResponse = \json_decode($body, true);
 
         // Test if return a valid JSON.
         if (JSON_ERROR_NONE !== json_last_error()) {
