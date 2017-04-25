@@ -44,6 +44,17 @@ class Client
     }
 
     /**
+     * Get headers from last response
+     * @return array
+    */
+    public function getHeaders()
+    {
+        $resp = $this->http->getResponse();
+
+        return is_object($resp) ? $resp->getHeaders() : array();
+    }
+
+    /**
      * POST method.
      *
      * @param string $endpoint API endpoint.
