@@ -70,6 +70,19 @@ class Client
     }
 
     /**
+     * PATCH method.
+     *
+     * @param string $endpoint API endpoint.
+     * @param array  $data     Request data.
+     *
+     * @return array
+     */
+    public function patch($endpoint, $data)
+    {
+        return $this->http->request($endpoint, 'PATCH', $data);
+    }
+
+    /**
      * GET method.
      *
      * @param string $endpoint   API endpoint.
