@@ -93,15 +93,19 @@ class OAuth
     }
 
     /**
-     * Normalize strings.
+     * Encode according to RFC 3986.
      *
-     * @param string $string String to be normalized.
+     * @param string|array $value Value to be normalized.
      *
      * @return string
      */
-    protected function normalizeString($string)
+    protected function encode($value)
     {
-        return \str_replace('%', '%25', \rawurlencode(\rawurldecode($string)));
+        if (is_array($value)) {
+            return array_map([$this, 'encode'], $value);
+        } else {
+            return str_replace(['+', '%7E'], [' ', '~'], rawurlencode($value));
+        }
     }
 
     /**
@@ -117,8 +121,8 @@ class OAuth
 
         foreach ($parameters as $key => $value) {
             // Percent symbols (%) must be double-encoded.
-            $key   = $this->normalizeString($key);
-            $value = $this->normalizeString($value);
+            $key   = $this->encode($key);
+            $value = $this->encode($value);
 
             $normalized[$key] = $value;
         }
@@ -182,16 +186,36 @@ class OAuth
         \uksort($parameters, 'strcmp');
 
         // Set query string.
-        $query = [];
-        foreach ($parameters as $key => $value) {
-            $query[] = $key . '%3D' . $value; // Join with equals sign.
-        }
-
-        $queryString  = \implode('%26', $query); // Join with ampersand.
+        $queryString  = \implode('%26', $this->joinWithEqualsSign($parameters)); // Join with ampersand.
         $stringToSign = $this->method . '&' . $baseRequestUri . '&' . $queryString;
         $secret       = $this->getSecret();
 
         return \base64_encode(\hash_hmac(self::HASH_ALGORITHM, $stringToSign, $secret, true));
+    }
+
+    /**
+     * Creates an array of urlencoded strings out of each array key/value pairs.
+     *
+     * @param  array  $params      Array of parameters to convert.
+     * @param  array  $queryParams Array to extend.
+     * @param  string $key         Optional Array key to append
+     * @return string              Array of urlencoded strings
+     */
+    protected function joinWithEqualsSign($params, $queryParams = [], $key = '') {
+        foreach ( $params as $paramKey => $paramValue ) {
+            if ( $key ) {
+                $paramKey = $key . '%5B' . $paramKey . '%5D'; // Handle multi-dimensional array.
+            }
+
+            if ( is_array( $paramValue ) ) {
+                $queryParams = $this->joinWithEqualsSign( $paramValue, $queryParams, $paramKey );
+            } else {
+                $string = $paramKey . '=' . $paramValue; // Join with equals sign.
+                $queryParams[] = $this->encode( $string );
+            }
+        }
+
+        return $queryParams;
     }
 
     /**
