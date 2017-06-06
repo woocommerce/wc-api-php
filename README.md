@@ -135,6 +135,7 @@ try {
 
 ## Release History
 
+- 2017-06-06 - 1.3.0 - Remove BOM begore decoding and added support for multi-dimensional arrays for oAuth1.0a.
 - 2017-03-15 - 1.2.0 - Added `user_agent` option.
 - 2016-12-14 - 1.1.4 - Fixed WordPress 4.7 compatibility.
 - 2016-10-26 - 1.1.3 - Allow set `oauth_timestamp` and improved how is handled the response headers.
