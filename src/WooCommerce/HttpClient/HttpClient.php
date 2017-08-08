@@ -342,7 +342,11 @@ class HttpClient
 
         // Test if return a valid JSON.
         if (JSON_ERROR_NONE !== json_last_error()) {
-            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Invalid JSON returned';
+            $message = sprintf(
+                '%s: %s',
+                function_exists('json_last_error_msg') ? json_last_error_msg() : 'Invalid JSON returned',
+                \var_export($body, true)
+            );
             throw new HttpClientException($message, $this->response->getCode(), $this->request, $this->response);
         }
 
