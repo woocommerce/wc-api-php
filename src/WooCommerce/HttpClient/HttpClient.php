@@ -288,12 +288,16 @@ class HttpClient
      */
     protected function setDefaultCurlSettings()
     {
-        $verifySsl = $this->options->verifySsl();
-        $timeout   = $this->options->getTimeout();
+        $verifySsl       = $this->options->verifySsl();
+        $timeout         = $this->options->getTimeout();
+        $followRedirects = $this->options->getFollowRedirects();
 
         \curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $verifySsl);
         if (!$verifySsl) {
             \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $verifySsl);
+        }
+        if ($followRedirects) {
+            \curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, $followRedirects);
         }
         \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);
