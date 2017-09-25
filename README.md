@@ -56,6 +56,7 @@ $woocommerce = new Client(
 | `wp_api_prefix`     | `string` | no       | Custom WP REST API URL prefix, used to support custom prefixes created with the `rest_url_prefix` filter               |
 | `version`           | `string` | no       | API version, default is `v3`                                                                                           |
 | `timeout`           | `int`    | no       | Request timeout, default is `15`                                                                                       |
+| `follow_redirects`  | `bool`   | no       | Allow the API call to follow redirects                                                                                 |
 | `verify_ssl`        | `bool`   | no       | Verify SSL when connect, use this option as `false` when need to test with self-signed certificates, default is `true` |
 | `query_string_auth` | `bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`                       |
 | `oauth_timestamp`   | `string` | no       | Custom oAuth timestamp, default is `time()`                                                                            |

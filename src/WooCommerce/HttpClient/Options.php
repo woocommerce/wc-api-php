@@ -135,4 +135,15 @@ class Options
     {
         return isset($this->options['user_agent']) ? $this->options['user_agent'] : self::USER_AGENT;
     }
+
+    /**
+     * Get follow redirects
+     *
+     * @return bool
+     */
+    public function getFollowRedirects()
+    {
+        return isset($this->options['follow_redirects']) ? (bool)$this->options['follow_redirects'] : false;
+
+    }
 }
