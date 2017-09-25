@@ -143,7 +143,7 @@ class Options
      */
     public function getFollowRedirects()
     {
-        return isset($this->options['follow_redirects']) ? (bool)$this->options['follow_redirects'] : false;
+        return isset($this->options['follow_redirects']) ? (bool) $this->options['follow_redirects'] : false;
 
     }
 }
