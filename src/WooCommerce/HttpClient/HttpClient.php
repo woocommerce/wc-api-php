@@ -317,8 +317,6 @@ class HttpClient
         if (!\in_array($this->response->getCode(), ['200', '201', '202'])) {
             $errors = isset( $parsedResponse->errors ) ? $parsedResponse->errors : $parsedResponse;
 
-			error_log( print_r( $errors, true ) );
-
             if ( is_array( $errors ) ) {
                 $errorMessage = $errors[0]['message'];
                 $errorCode    = $errors[0]['code'];
