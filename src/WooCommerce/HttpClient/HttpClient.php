@@ -196,6 +196,12 @@ class HttpClient
             $headers['Content-Type'] = 'application/json;charset=utf-8';
         }
 
+        if (!empty($this->options->getRequestHeaders())) {
+            foreach ($this->options->getRequestHeaders() as $key => $header) {
+                $headers[$key] = $header;
+            }
+        }
+
         return $headers;
     }
 
