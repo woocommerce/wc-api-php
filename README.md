@@ -61,7 +61,7 @@ $woocommerce = new Client(
 | `query_string_auth` | `bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`                       |
 | `oauth_timestamp`   | `string` | no       | Custom oAuth timestamp, default is `time()`                                                                            |
 | `user_agent`        | `string` | no       | Custom user-agent, default is `WooCommerce API Client-PHP`                                                             |
-| `requestHeaders`    | `array`  | no       | Custom Request Headers (see [Client options - requestHeaders usage](#client-options-requestheaders-usage)) below       |                                                                                                                    |
+| `requestHeaders`    | `array`  | no       | Custom Request Headers (see [Client options - requestHeaders usage](#client-options---requestheaders-usage)) below     |                                                                                                                    |
 
 
 ##### Client options - requestHeaders usage
