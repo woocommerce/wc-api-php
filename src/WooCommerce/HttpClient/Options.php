@@ -146,4 +146,14 @@ class Options
         return isset($this->options['follow_redirects']) ? (bool) $this->options['follow_redirects'] : false;
 
     }
+
+    /**
+     * Get request headers.
+     *
+     * @return array
+     */
+    public function getRequestHeaders()
+    {
+        return isset($this->options['requestHeaders']) ? $this->options['requestHeaders'] : [];
+    }
 }
