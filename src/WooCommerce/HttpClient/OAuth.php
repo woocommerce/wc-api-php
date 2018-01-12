@@ -81,8 +81,15 @@ class OAuth
      * @param array  $parameters     Request parameters.
      * @param string $timestamp      Timestamp.
      */
-    public function __construct($url, $consumerKey, $consumerSecret, $apiVersion, $method, $parameters = [], $timestamp = '')
-    {
+    public function __construct(
+        $url,
+        $consumerKey,
+        $consumerSecret,
+        $apiVersion,
+        $method,
+        $parameters = [],
+        $timestamp = ''
+    ) {
         $this->url            = $url;
         $this->consumerKey    = $consumerKey;
         $this->consumerSecret = $consumerSecret;
@@ -201,17 +208,18 @@ class OAuth
      * @param  string $key         Optional Array key to append
      * @return string              Array of urlencoded strings
      */
-    protected function joinWithEqualsSign($params, $queryParams = [], $key = '') {
-        foreach ( $params as $paramKey => $paramValue ) {
-            if ( $key ) {
+    protected function joinWithEqualsSign($params, $queryParams = [], $key = '')
+    {
+        foreach ($params as $paramKey => $paramValue) {
+            if ($key) {
                 $paramKey = $key . '%5B' . $paramKey . '%5D'; // Handle multi-dimensional array.
             }
 
-            if ( is_array( $paramValue ) ) {
-                $queryParams = $this->joinWithEqualsSign( $paramValue, $queryParams, $paramKey );
+            if (is_array($paramValue)) {
+                $queryParams = $this->joinWithEqualsSign($paramValue, $queryParams, $paramKey);
             } else {
                 $string = $paramKey . '=' . $paramValue; // Join with equals sign.
-                $queryParams[] = $this->encode( $string );
+                $queryParams[] = $this->encode($string);
             }
         }
 
