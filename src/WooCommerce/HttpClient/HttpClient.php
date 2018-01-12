@@ -297,7 +297,7 @@ class HttpClient
             \curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $verifySsl);
         }
         if ($followRedirects) {
-            \curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, $followRedirects);
+            \curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
         }
         \curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         \curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);

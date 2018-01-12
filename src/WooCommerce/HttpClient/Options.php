@@ -128,7 +128,7 @@ class Options
 
     /**
      * Custom user agent.
-     * 
+     *
      * @return string
      */
     public function userAgent()
@@ -144,6 +144,5 @@ class Options
     public function getFollowRedirects()
     {
         return isset($this->options['follow_redirects']) ? (bool) $this->options['follow_redirects'] : false;
-
     }
 }
