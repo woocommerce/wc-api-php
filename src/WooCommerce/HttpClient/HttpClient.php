@@ -338,8 +338,8 @@ class HttpClient
             $errors = isset($parsedResponse->errors) ? $parsedResponse->errors : $parsedResponse;
 
             if (is_array($errors)) {
-                $errorMessage = $errors[0]['message'];
-                $errorCode    = $errors[0]['code'];
+                $errorMessage = $errors[0]->message;
+                $errorCode    = $errors[0]->code;
             } else {
                 $errorMessage = $errors->message;
                 $errorCode    = $errors->code;
