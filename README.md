@@ -34,7 +34,7 @@ $woocommerce = new Client(
     'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
     [
         'wp_api' => true,
-        'version' => 'wc/v1',
+        'version' => 'wc/v2',
     ]
 );
 ```
@@ -136,6 +136,7 @@ try {
 
 ## Release History
 
+- 2018-03-29 - 2.0.1 - Fixed fatal errors on `lookForErrors`.
 - 2018-01-12 - 2.0.0 - Responses changes from arrays to `stdClass` objects. Added `follow_redirects` option.
 - 2017-06-06 - 1.3.0 - Remove BOM before decoding and added support for multi-dimensional arrays for oAuth1.0a.
 - 2017-03-15 - 1.2.0 - Added `user_agent` option.

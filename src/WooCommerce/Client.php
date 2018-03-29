@@ -21,7 +21,7 @@ class Client
     /**
      * WooCommerce REST API Client version.
      */
-    const VERSION = '2.0.0';
+    const VERSION = '2.0.1';
 
     /**
      * HttpClient instance.
