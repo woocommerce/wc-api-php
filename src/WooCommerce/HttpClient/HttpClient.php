@@ -363,7 +363,7 @@ class HttpClient
     {
         $body = $this->response->getBody();
 
-        if (0 === strpos(bin2hex($body), 'efbbbf')) {
+        if (0 === strpos(bin2hex(substr($body, 0, 4)), 'efbbbf')) {
             $body = substr($body, 3);
         }
 
