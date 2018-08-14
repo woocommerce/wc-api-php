@@ -74,12 +74,18 @@ class Client
      *
      * @param string $endpoint   API endpoint.
      * @param array  $parameters Request parameters.
-     *
+     * @param \Closure $middleware custom filter for result
      * @return array
      */
-    public function get($endpoint, $parameters = [])
+    public function get($endpoint, $parameters = [],$middleware=null)
     {
-        return $this->http->request($endpoint, 'GET', [], $parameters);
+        $res =$this->http->request($endpoint, 'GET', [], $parameters);
+
+        if ($middleware instanceof \Closure){
+
+            return $middleware($res);
+        }
+        return $res;
     }
 
     /**
@@ -106,4 +112,16 @@ class Client
     {
         return $this->http->request($endpoint, 'OPTIONS', [], []);
     }
+
+    /**
+     * Set http Client
+     *
+     * @param HttpClient $http $httpClient
+     *
+     * @return void
+     */
+    public function setHttp($http) {
+        $this->http = $http;
+    }
+
 }
