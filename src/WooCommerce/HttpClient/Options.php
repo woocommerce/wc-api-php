@@ -103,7 +103,7 @@ class Options
      */
     public function isWPAPI()
     {
-        return isset($this->options['wp_api']) ? (bool) $this->options['wp_api'] : false;
+        return isset($this->options['wp_api']) ? (bool) $this->options['wp_api'] : true;
     }
 
     /**
