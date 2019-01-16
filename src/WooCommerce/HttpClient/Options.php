@@ -19,7 +19,7 @@ class Options
     /**
      * Default WooCommerce REST API version.
      */
-    const VERSION = 'v3';
+    const VERSION = 'wc/v3';
 
     /**
      * Default request timeout.
