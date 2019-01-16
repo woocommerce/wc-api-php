@@ -34,7 +34,7 @@ $woocommerce = new Client(
     'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
     [
         'wp_api' => true,
-        'version' => 'wc/v2',
+        'version' => 'wc/v3',
     ]
 );
 ```
@@ -115,22 +115,22 @@ try {
 
     // Last request data.
     $lastRequest = $woocommerce->http->getRequest();
-    $lastRequest->getUrl(); // Requested URL (string).
-    $lastRequest->getMethod(); // Request method (string).
-    $lastRequest->getParameters(); // Request parameters (array).
-    $lastRequest->getHeaders(); // Request headers (array).
-    $lastRequest->getBody(); // Request body (JSON).
+    echo '<pre><code>' . print_r( $lastRequest->getUrl(), true ) . '</code><pre>'; // Requested URL (string).
+    echo '<pre><code>' . print_r( $lastRequest->getMethod(), true ) . '</code><pre>'; // Request method (string).
+    echo '<pre><code>' . print_r( $lastRequest->getParameters(), true ) . '</code><pre>'; // Request parameters (array).
+    echo '<pre><code>' . print_r( $lastRequest->getHeaders(), true ) . '</code><pre>'; // Request headers (array).
+    echo '<pre><code>' . print_r( $lastRequest->getBody(), true ) . '</code><pre>'; // Request body (JSON).
 
     // Last response data.
     $lastResponse = $woocommerce->http->getResponse();
-    $lastResponse->getCode(); // Response code (int).
-    $lastResponse->getHeaders(); // Response headers (array).
-    $lastResponse->getBody(); // Response body (JSON).
+    echo '<pre><code>' . print_r( $lastResponse->getCode(), true ) . '</code><pre>'; // Response code (int).
+    echo '<pre><code>' . print_r( $lastResponse->getHeaders(), true ) . '</code><pre>'; // Response headers (array).
+    echo '<pre><code>' . print_r( $lastResponse->getBody(), true ) . '</code><pre>'; // Response body (JSON).
 
 } catch (HttpClientException $e) {
-    $e->getMessage(); // Error message.
-    $e->getRequest(); // Last request data.
-    $e->getResponse(); // Last response data.
+    echo '<pre><code>' . print_r( $e->getMessage(), true ) . '</code><pre>'; // Error message.
+    echo '<pre><code>' . print_r( $e->getRequest(), true ) . '</code><pre>'; // Last request data.
+    echo '<pre><code>' . print_r( $e->getResponse(), true ) . '</code><pre>'; // Last response data.
 }
 ```
 
