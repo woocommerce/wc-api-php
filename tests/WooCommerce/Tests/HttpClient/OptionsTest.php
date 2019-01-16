@@ -16,7 +16,7 @@ class OptionsTest extends TestCase
 
     public function testDefaultValueOfGetVersion()
     {
-        $this->assertEquals('v3', $this->options->getVersion());
+        $this->assertEquals('wc/v3', $this->options->getVersion());
     }
 
     public function testDefaultValueOfVerifySsl()
@@ -36,7 +36,7 @@ class OptionsTest extends TestCase
 
     public function testisWPAPI()
     {
-        $this->assertFalse($this->options->isWPAPI());
+        $this->assertTrue($this->options->isWPAPI());
     }
 
     public function testDefaultValueOfIsApiPrefix()
