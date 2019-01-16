@@ -365,6 +365,7 @@ class HttpClient
     {
         $body = $this->response->getBody();
 
+        // Look for UTF-8 BOM and remove.
         if (0 === strpos(bin2hex(substr($body, 0, 4)), 'efbbbf')) {
             $body = substr($body, 3);
         }
