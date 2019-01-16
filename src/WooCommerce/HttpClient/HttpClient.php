@@ -336,11 +336,13 @@ class HttpClient
         // Any non-200/201/202 response code indicates an error.
         if (!\in_array($this->response->getCode(), ['200', '201', '202'])) {
             $errors = isset($parsedResponse->errors) ? $parsedResponse->errors : $parsedResponse;
+            $errorMessage = '';
+            $errorCode = '';
 
             if (is_array($errors)) {
                 $errorMessage = $errors[0]->message;
                 $errorCode    = $errors[0]->code;
-            } else {
+            } elseif (isset($errors->message, $errors->code)) {
                 $errorMessage = $errors->message;
                 $errorCode    = $errors->code;
             }
@@ -372,7 +374,12 @@ class HttpClient
         // Test if return a valid JSON.
         if (JSON_ERROR_NONE !== json_last_error()) {
             $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Invalid JSON returned';
-            throw new HttpClientException($message, $this->response->getCode(), $this->request, $this->response);
+            throw new HttpClientException(
+                sprintf('JSON ERROR: %s', $message),
+                $this->response->getCode(),
+                $this->request,
+                $this->response
+            );
         }
 
         $this->lookForErrors($parsedResponse);
