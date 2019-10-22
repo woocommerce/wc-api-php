@@ -60,6 +60,13 @@ class HttpClient
     protected $options;
 
     /**
+     * The custom cURL options to use in the requests.
+     *
+     * @var array
+     */
+    private $customCurlOptions = [];
+
+    /**
      * Request.
      *
      * @var Request
@@ -324,6 +331,10 @@ class HttpClient
         \curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         \curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->request->getRawHeaders());
         \curl_setopt($this->ch, CURLOPT_URL, $this->request->getUrl());
+
+        foreach ($this->customCurlOptions as $customCurlOptionKey => $customCurlOptionValue) {
+            \curl_setopt($this->ch, $customCurlOptionKey, $customCurlOptionValue);
+        }
     }
 
     /**
@@ -440,5 +451,15 @@ class HttpClient
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * Set custom cURL options to use in requests.
+     *
+     * @param array $curlOptions
+     */
+    public function setCustomCurlOptions(array $curlOptions)
+    {
+        $this->customCurlOptions = $curlOptions;
     }
 }
