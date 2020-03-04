@@ -153,16 +153,6 @@ class HttpClient
     protected function authenticate($url, $method, $parameters = [])
     {
         // Setup authentication.
-        if ($this->isSsl()) {
-            $basicAuth  = new BasicAuth(
-                $this->ch,
-                $this->consumerKey,
-                $this->consumerSecret,
-                $this->options->isQueryStringAuth(),
-                $parameters
-            );
-            $parameters = $basicAuth->getParameters();
-        } else {
             $oAuth      = new OAuth(
                 $url,
                 $this->consumerKey,
@@ -173,7 +163,6 @@ class HttpClient
                 $this->options->oauthTimestamp()
             );
             $parameters = $oAuth->getParameters();
-        }
 
         return $parameters;
     }
