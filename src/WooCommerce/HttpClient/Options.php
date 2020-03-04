@@ -74,6 +74,16 @@ class Options
     {
         return isset($this->options['verify_ssl']) ? (bool) $this->options['verify_ssl'] : true;
     }
+    
+    /**
+     * Check if need to ability to use BasicAuth.
+     *
+     * @return bool
+     */
+    public function useBasicAuth()
+    {
+        return isset($this->options['basic_auth']) ? (bool) $this->options['basic_auth'] : true;
+    }
 
     /**
      * Get timeout.
