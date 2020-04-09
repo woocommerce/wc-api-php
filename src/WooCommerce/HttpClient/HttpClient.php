@@ -135,7 +135,7 @@ class HttpClient
     protected function buildUrlQuery($url, $parameters = [])
     {
         if (!empty($parameters)) {
-            if (false !== strpos($url, '?') {
+            if (false !== strpos($url, '?')) {
                 $url .= '&' . \http_build_query($parameters);
             } else {
                 $url .= '?' . \http_build_query($parameters);
