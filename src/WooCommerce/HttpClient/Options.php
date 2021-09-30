@@ -167,6 +167,4 @@ class Options
     {
         return isset($this->options['method_override_header']) && $this->options['method_override_header'];
     }
-
-
 }
