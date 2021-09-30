@@ -145,4 +145,28 @@ class Options
     {
         return isset($this->options['follow_redirects']) ? (bool) $this->options['follow_redirects'] : false;
     }
+
+    /**
+     * Check is it needed to mask all non-GET/POST methods (PUT/DELETE/etc.) by using POST method with added
+     * query parameter ?_method=METHOD into URL
+     *
+     * @return bool
+     */
+    public function isMethodOverrideQuery()
+    {
+        return isset($this->options['method_override_query']) && $this->options['method_override_query'];
+    }
+
+    /**
+     * Check is it needed to mask all non-GET/POST methods (PUT/DELETE/etc.) by using POST method with added
+     * "X-HTTP-Method-Override: METHOD" HTTP header into request
+     *
+     * @return bool
+     */
+    public function isMethodOverrideHeader()
+    {
+        return isset($this->options['method_override_header']) && $this->options['method_override_header'];
+    }
+
+
 }

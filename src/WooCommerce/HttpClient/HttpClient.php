@@ -228,6 +228,24 @@ class HttpClient
         $body    = '';
         $url     = $this->url . $endpoint;
         $hasData = !empty($data);
+        $headers = $this->getRequestHeaders($hasData);
+
+        // HTTP method override feature which masks PUT and DELETE HTTP methods as POST method with added
+        // ?_method=PUT query parameter and/or X-HTTP-Method-Override HTTP header
+        if (!in_array($method, ['GET', 'POST'])) {
+            $usePostMethod = false;
+            if ($this->options->isMethodOverrideQuery()) {
+                $parameters = array_merge(['_method' => $method], $parameters);
+                $usePostMethod = true;
+            }
+            if ($this->options->isMethodOverrideHeader()) {
+                $headers['X-HTTP-Method-Override'] = $method;
+                $usePostMethod = true;
+            }
+            if ($usePostMethod) {
+                $method = 'POST';
+            }
+        }
 
         // Setup authentication.
         $parameters = $this->authenticate($url, $method, $parameters);
@@ -245,7 +263,7 @@ class HttpClient
             $this->buildUrlQuery($url, $parameters),
             $method,
             $parameters,
-            $this->getRequestHeaders($hasData),
+            $headers,
             $body
         );
 
