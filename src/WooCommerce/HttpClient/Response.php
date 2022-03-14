@@ -52,6 +52,20 @@ class Response
     }
 
     /**
+     * To string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return \json_encode([
+            'code'    => $this->code,
+            'headers' => $this->headers,
+            'body'    => $this->body,
+        ]);
+    }
+
+    /**
      * Set code.
      *
      * @param int $code Response code.
