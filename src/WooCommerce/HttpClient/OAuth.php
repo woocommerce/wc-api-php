@@ -190,7 +190,7 @@ class OAuth
 
         // Normalize parameter key/values and sort them.
         $parameters = $this->normalizeParameters($parameters);
-        \uksort($parameters, 'strcmp');
+        $parameters = $this->getSortedParameters($parameters);
 
         // Set query string.
         $queryString  = \implode('%26', $this->joinWithEqualsSign($parameters)); // Join with ampersand.
