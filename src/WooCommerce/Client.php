@@ -36,7 +36,7 @@ class Client
      * @param string $url            Store URL.
      * @param string $consumerKey    Consumer key.
      * @param string $consumerSecret Consumer secret.
-     * @param array  $options        Options (version, timeout, verify_ssl).
+     * @param array  $options        Options (version, timeout, verify_ssl, oauth_only).
      */
     public function __construct($url, $consumerKey, $consumerSecret, $options = [])
     {

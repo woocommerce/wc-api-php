@@ -160,8 +160,8 @@ class HttpClient
     protected function authenticate($url, $method, $parameters = [])
     {
         // Setup authentication.
-        if ($this->isSsl()) {
-            $basicAuth  = new BasicAuth(
+        if (!$this->options->isOAuthOnly() && $this->isSsl()) {
+            $basicAuth = new BasicAuth(
                 $this->ch,
                 $this->consumerKey,
                 $this->consumerSecret,
@@ -170,7 +170,7 @@ class HttpClient
             );
             $parameters = $basicAuth->getParameters();
         } else {
-            $oAuth      = new OAuth(
+            $oAuth = new OAuth(
                 $url,
                 $this->consumerKey,
                 $this->consumerSecret,

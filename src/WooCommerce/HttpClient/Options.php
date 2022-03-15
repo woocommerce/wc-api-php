@@ -76,6 +76,16 @@ class Options
     }
 
     /**
+     * Only use OAuth.
+     *
+     * @return bool
+     */
+    public function isOAuthOnly()
+    {
+        return isset($this->options['oauth_only']) ? (bool) $this->options['oauth_only'] : false;
+    }
+
+    /**
      * Get timeout.
      *
      * @return int

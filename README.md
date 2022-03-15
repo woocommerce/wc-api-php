@@ -63,6 +63,7 @@ $woocommerce = new Client($url, $consumer_key, $consumer_secret, $options)
 | `follow_redirects`  | `bool`   | no       | Allow the API call to follow redirects                                                                                 |
 | `query_string_auth` | `bool`   | no       | Force Basic Authentication as query string when `true` and using under HTTPS, default is `false`                       |
 | `oauth_timestamp`   | `string` | no       | Custom oAuth timestamp, default is `time()`                                                                            |
+| `oauth_only`        | `bool`   | no       | Only use oauth for requests, it will disable Basic Auth, default is `false`                                            |
 | `user_agent`        | `string` | no       | Custom user-agent, default is `WooCommerce API Client-PHP`                                                             |
 | `wp_api_prefix`     | `string` | no       | Custom WP REST API URL prefix, used to support custom prefixes created with the `rest_url_prefix` filter               |
 | `wp_api`            | `bool`   | no       | Set to `false` in order to use the legacy WooCommerce REST API (deprecated and not recommended)                        |
