@@ -24,6 +24,11 @@ class OptionsTest extends TestCase
         $this->assertTrue($this->options->verifySsl());
     }
 
+    public function testDefaultValueOfIsOAuthOnly()
+    {
+        $this->assertFalse($this->options->isOAuthOnly());
+    }
+
     public function testDefaultValueOfGetTimeout()
     {
         $this->assertEquals(15, $this->options->getTimeout());

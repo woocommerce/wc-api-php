@@ -74,15 +74,15 @@ class Options
     {
         return isset($this->options['verify_ssl']) ? (bool) $this->options['verify_ssl'] : true;
     }
-    
+
     /**
-     * Check if need to ability to use BasicAuth.
+     * Only use OAuth.
      *
      * @return bool
      */
-    public function useBasicAuth()
+    public function isOAuthOnly()
     {
-        return isset($this->options['basic_auth']) ? (bool) $this->options['basic_auth'] : true;
+        return isset($this->options['oauth_only']) ? (bool) $this->options['oauth_only'] : false;
     }
 
     /**
