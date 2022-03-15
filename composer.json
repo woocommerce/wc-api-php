@@ -9,6 +9,7 @@
       "email": "claudio.sanches@automattic.com"
     }
   ],
+  "minimum-stability": "dev",
   "keywords": [
     "API",
     "WooCommerce"
