@@ -16,10 +16,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phplint
+          tools: phplint, phpcs
       - name: Tool versions
         run: |
           php --version
           phplint --version
+          phpcs --version
       - name: Run PHP Linter
         run: phplint
+      - name: Run PHP CodeSniffer
+        run: phpcs -p
