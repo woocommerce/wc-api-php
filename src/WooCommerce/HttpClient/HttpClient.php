@@ -117,8 +117,6 @@ class HttpClient
         return 'https://' === \substr($this->url, 0, 8);
     }
 
-
-
     /**
      * Build API URL.
      *
