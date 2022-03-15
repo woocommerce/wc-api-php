@@ -19,7 +19,7 @@
     "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
+    "phpunit/phpunit": "^6.0",
     "squizlabs/php_codesniffer": "3.*"
   },
   "autoload": {
