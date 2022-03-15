@@ -26,6 +26,6 @@ jobs:
           php --version
           composer --version
       - name: Install composer packages
-        run: ./github/bin/install-dependencies
+        run: ./.github/bin/install-dependencies
       - name: Run tests
-        run: ./github/bin/run-phpunit
+        run: ./.github/bin/run-phpunit
