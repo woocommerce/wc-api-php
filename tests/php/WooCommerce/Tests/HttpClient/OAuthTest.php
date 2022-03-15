@@ -9,7 +9,7 @@ class OAuthTest extends TestCase
 
     protected $oAuth;
 
-    public function setUp()
+    public function setUp(): void
     {
         $url = 'http://example.com';
         $consumerKey = 'ck_xxx';

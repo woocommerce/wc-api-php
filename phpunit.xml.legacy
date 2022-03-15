@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="tests/php/bootstrap.php"
+<phpunit bootstrap="tests/legacy-php/bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -8,9 +8,9 @@
          stopOnFailure="false"
          processIsolation="false"
          backupGlobals="false">
-        <testsuite name="all">
-            <directory>./tests/php/WooCommerce/Tests</directory>
-        </testsuite>
+    <testsuite>
+        <directory>./tests/legacy-php/WooCommerce/Tests</directory>
+    </testsuite>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/</directory>

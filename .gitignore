@@ -1,4 +1,5 @@
 .idea
-composer.lock
 vendor/
+composer.lock
+.phpunit.result.cache
 run.php

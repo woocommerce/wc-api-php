@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ "$(php -r "echo version_compare(PHP_VERSION, '7.4', '<');")" ]; then
+    composer require --dev phpunit/phpunit ^6
+elif [ "$(php -r "echo version_compare(PHP_VERSION, '8.0', '>=');")" ]; then
+    composer require --dev phpunit/phpunit dev-master -n
+else
+    composer install -n
+fi

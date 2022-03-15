@@ -1,0 +1,31 @@
+name: Run CI
+on:
+  push:
+    branches:
+      - trunk
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          coverage: xdebug
+      - name: Tool versions
+        run: |
+          php --version
+          composer --version
+      - name: Install composer packages
+        run: ./.github/bin/install-dependencies
+      - name: Run tests
+        run: ./.github/bin/run-phpunit

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ "$(php -r "echo version_compare(PHP_VERSION, '7.4', '<');")" ]; then
+    ./vendor/bin/phpunit -c phpunit.xml.legacy --coverage-text
+else
+    ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-text
+fi
