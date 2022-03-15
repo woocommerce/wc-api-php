@@ -2,7 +2,7 @@
 
 A PHP wrapper for the WooCommerce REST API. Easily interact with the WooCommerce REST API securely using this library. If using a HTTPS connection this library uses BasicAuth, else it uses Oauth to provide a secure connection to WooCommerce.
 
-[![build status](https://secure.travis-ci.org/woocommerce/wc-api-php.svg)](http://travis-ci.org/woocommerce/wc-api-php)
+[![CI status](https://github.com/woocommerce/wc-api-php/actions/workflows/ci.yml/badge.svg?branch=trunk)](https://github.com/woocommerce/wc-api-php/actions/workflows/ci.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/woocommerce/wc-api-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/woocommerce/wc-api-php/?branch=master)
 [![PHP version](https://badge.fury.io/ph/automattic%2Fwoocommerce.svg)](https://packagist.org/packages/automattic/woocommerce)
 
