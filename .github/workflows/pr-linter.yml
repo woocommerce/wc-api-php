@@ -1,8 +1,8 @@
 name: PR - Linter
 on: pull_request
 jobs:
-  test:
-    name: PHP ${{ matrix.php }}
+  lint:
+    name: PHP ${{ matrix.php }} Linter
     timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
@@ -16,14 +16,32 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phplint, phpcs, cs2pr
+          tools: phplint
       - name: Tool versions
         run: |
           php --version
           phplint --version
-          phpcs --version
       - name: Run PHP Linter
-        run: phplint
+        continue-on-error: true
+        run: phplint --json phplint-report.json
+      - name: Show PHPLint results in PR
+        run: php ./.github/bin/phplint2pr phplint-report.json
+  cs:
+    name: Coding Standards (PHP 7.4)
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: phpcs, cs2pr
+      - name: Tool versions
+        run: |
+          php --version
+          phpcs --version
       - name: Run PHP CodeSniffer
         continue-on-error: true
         run: phpcs -p --encoding=utf-8 -s -p --report-full --report-checkstyle=./phpcs-report.xml

@@ -1,0 +1,107 @@
+#!/usr/bin/php
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 'stderr');
+gc_disable();
+
+/**
+ * Help message.
+ *
+ * @param string[] $args
+ */
+function help($args) {
+    $filename = empty($args[0]) ? 'phplint2pr' : $args[0];
+
+    echo "phplint2pr 0.0.1\n";
+    echo "Annotate a Github Pull Request based on a PHPLint report in JSON.\n";
+    echo "Usage: {$filename} [OPTION] <filename>\n";
+    echo "\n";
+    echo "Supported options:\n";
+    echo "  --help|-h   Display this help message.\n";
+}
+
+/**
+ * Run script.
+ *
+ * @param string[] $args
+ */
+function run($args) {
+    if (empty($args[1])) {
+        fwrite(STDERR, "Error: Missing <filename> arg!\n\n");
+        exit(2);
+    } elseif (in_array($args[1], ['--help', '-h'])) {
+        help($args);
+        exit(9);
+    } elseif(!file_exists($args[1])) {
+        fwrite(STDERR, "Error: <filename> doesn't exists!\n\n");
+        exit(2);
+    }
+
+    printAnnotete($args[1]);
+}
+
+/**
+ * Escape data.
+ *
+ * @param string $data
+ * @return string
+ */
+function escapeData($data)
+{
+    $data = str_replace("%", '%25', $data);
+    $data = str_replace("\r", '%0D', $data);
+    $data = str_replace("\n", '%0A', $data);
+
+    return $data;
+}
+
+/**
+ * Escape property.
+ *
+ * @param string $property
+ * @return string
+ */
+function escapeProperty($property)
+{
+    $property = str_replace("%", '%25', $property);
+    $property = str_replace("\r", '%0D', $property);
+    $property = str_replace("\n", '%0A', $property);
+    $property = str_replace(":", '%3A', $property);
+    $property = str_replace(",", '%2C', $property);
+
+    return $property;
+}
+
+/**
+ * Process JSON and print annotate.
+ *
+ * @param string $jsonFile
+ */
+function printAnnotete($jsonFile)
+{
+    $json = file_get_contents($jsonFile);
+    $report = json_decode($json, true);
+
+    // Test if return a valid JSON.
+    if (JSON_ERROR_NONE !== json_last_error()) {
+        $message = json_last_error_msg();
+        fwrite(STDERR, "JSON Error: {$message}\n\n");
+        exit(2);
+    }
+
+    if (empty($report['errors'])) {
+        exit(0);
+    }
+
+    foreach ($report['errors'] as $error) {
+        $filename = escapeProperty($error['file_name']);
+        $message = escapeData($error['error']);
+        $line = (int) $error['line'];
+
+        echo sprintf( "::error file=%s,line=%s::%s\n", $filename, $line, $message );
+    }
+
+    exit(1);
+}
+
+run($argv);
