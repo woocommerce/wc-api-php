@@ -1,4 +1,4 @@
-name: Run unit tests on PR
+name: PR - Unit Tests
 on: pull_request
 jobs:
   test:
