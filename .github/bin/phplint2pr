@@ -1,0 +1,59 @@
+#!/usr/bin/php
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 'stderr');
+gc_disable();
+
+/**
+ * Run script.
+ */
+function run() {
+    $json = file_get_contents('./phplint-report.json');
+    $report = json_decode($json, true);
+
+    if (empty($report['errors'])) {
+        return;
+    }
+
+    foreach ($report['errors'] as $error) {
+        $filename = escapeProperty($error['file_name']);
+        $message = escapeData($error['error']);
+        $line = (int) $error['line'];
+
+        echo sprintf( "::error file=%s,line=%s::%s\n", $filename, $line, $message );
+    }
+}
+
+/**
+ * Escape data.
+ *
+ * @param string $data
+ * @return string
+ */
+function escapeData($data)
+{
+    $data = str_replace("%", '%25', $data);
+    $data = str_replace("\r", '%0D', $data);
+    $data = str_replace("\n", '%0A', $data);
+
+    return $data;
+}
+
+/**
+ * Escape property.
+ *
+ * @param string $property
+ * @return string
+ */
+function escapeProperty($property)
+{
+    $property = str_replace("%", '%25', $property);
+    $property = str_replace("\r", '%0D', $property);
+    $property = str_replace("\n", '%0A', $property);
+    $property = str_replace(":", '%3A', $property);
+    $property = str_replace(",", '%2C', $property);
+
+    return $property;
+}
+
+run();
