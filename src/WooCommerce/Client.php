@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WooCommerce REST API Client
  *
@@ -17,11 +18,10 @@ use Automattic\WooCommerce\HttpClient\HttpClient;
  */
 class Client
 {
-
     /**
      * WooCommerce REST API Client version.
      */
-    const VERSION = '3.0.0';
+    public const VERSION = '3.0.0';
 
     /**
      * HttpClient instance.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WooCommerce REST API HTTP Client Response
  *
@@ -15,7 +16,6 @@ namespace Automattic\WooCommerce\HttpClient;
  */
 class Response
 {
-
     /**
      * Response code.
      *

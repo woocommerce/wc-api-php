@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WooCommerce REST API HTTP Client
  *
@@ -23,7 +24,6 @@ use Automattic\WooCommerce\HttpClient\Response;
  */
 class HttpClient
 {
-
     /**
      * cURL handle.
      *
