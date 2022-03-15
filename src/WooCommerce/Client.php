@@ -16,12 +16,11 @@ use Automattic\WooCommerce\HttpClient\HttpClient;
  *
  * @package Automattic/WooCommerce
  */
-class Client
-{
+class Client{
     /**
      * WooCommerce REST API Client version.
      */
-    public const VERSION = '3.0.0';
+    const VERSION = '3.0.0';
 
     /**
      * HttpClient instance.
