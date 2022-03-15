@@ -117,8 +117,8 @@ class HttpClient
         return 'https://' === \substr($this->url, 0, 8);
     }
 
-    
-    
+
+
     /**
      * Build API URL.
      *
@@ -162,28 +162,28 @@ class HttpClient
     protected function authenticate($url, $method, $parameters = [])
     {
         // Setup authentication.
-        if (this->options->useBasicAuth() && $this->isSsl()) {	
-            $basicAuth  = new BasicAuth(	
-                $this->ch,	
-                $this->consumerKey,	
-                $this->consumerSecret,	
-                $this->options->isQueryStringAuth(),	
-                $parameters	
-            );	
-            $parameters = $basicAuth->getParameters();	
-        } else {	
-            $oAuth      = new OAuth(	            $oAuth      = new OAuth(
-                $url,	                $url,
-                $this->consumerKey,	                $this->consumerKey,
-                $this->consumerSecret,	                $this->consumerSecret,
-                $this->options->getVersion(),	                $this->options->getVersion(),
-                $method,	                $method,
-                $parameters,	                $parameters,
-                $this->options->oauthTimestamp()	                $this->options->oauthTimestamp()
-            );	            );
-            $parameters = $oAuth->getParameters();	            $parameters = $oAuth->getParameters();
+        if ($this->options->useBasicAuth() && $this->isSsl()) {
+            $basicAuth = new BasicAuth(
+                $this->ch,
+                $this->consumerKey,
+                $this->consumerSecret,
+                $this->options->isQueryStringAuth(),
+                $parameters
+            );
+            $parameters = $basicAuth->getParameters();
+        } else {
+            $oAuth = new OAuth(
+                $url,
+                $this->consumerKey,
+                $this->consumerSecret,
+                $this->options->getVersion(),
+                $method,
+                $parameters,
+                $this->options->oauthTimestamp()
+            );
+            $parameters = $oAuth->getParameters();
         }
-        
+
         return $parameters;
     }
 
