@@ -1,0 +1,25 @@
+name: PR - Lint
+on: pull_request
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["7.4", "8.1"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: phplint
+      - name: Tool versions
+        run: |
+          php --version
+          phplint --version
+      - name: Run Linter
+        run: phplint
