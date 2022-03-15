@@ -1,6 +1,6 @@
 <?php
 
-namespace Automattic\WooCommerce\Tests;
+namespace Automattic\WooCommerce\LegacyTests;
 
 use \PHPUnit\Framework\TestCase as TestCase;
 

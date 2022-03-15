@@ -23,11 +23,6 @@ jobs:
           php --version
           composer --version
       - name: Install composer packages
-        run: |
-          if [ "$(php -r "echo version_compare(PHP_VERSION,'8.0','>=');")" ]; then
-            composer require phpunit/phpunit dev-master -n
-          else
-            composer install -n
-          fi
+        run: ./github/bin/install-dependencies
       - name: Run tests
-        run: ./vendor/bin/phpunit --verbose --coverage-text
+        run: ./github/bin/run-phpunit

@@ -9,7 +9,7 @@ class HttpClientExceptionTest extends TestCase
 
     protected $exception;
 
-    public function setUp()
+    public function setUp(): void
     {
         $request  = new \Automattic\WooCommerce\HttpClient\Request();
         $response = new \Automattic\WooCommerce\HttpClient\Response();
