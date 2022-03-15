@@ -2,12 +2,14 @@ name: PR - Linter
 on: pull_request
 jobs:
   setup:
+    name: Setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
   lint:
     name: PHP ${{ matrix.php }} Linter
+    needs: setup
     timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
@@ -28,6 +30,7 @@ jobs:
         run: phplint
   cs:
     name: Coding Standards (PHP 7.4)
+    needs: setup
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
