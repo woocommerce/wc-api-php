@@ -16,7 +16,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phplint, phpcs
+          tools: phplint, phpcs, cs2pr
       - name: Tool versions
         run: |
           php --version
@@ -25,4 +25,7 @@ jobs:
       - name: Run PHP Linter
         run: phplint
       - name: Run PHP CodeSniffer
-        run: phpcs -p
+        continue-on-error: true
+        run: phpcs -p --encoding=utf-8 -s -p --report-full --report-checkstyle=./phpcs-report.xml
+      - name: Show PHPCS results in PR
+        run: cs2pr ./phpcs-report.xml
