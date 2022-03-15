@@ -25,7 +25,7 @@ jobs:
         continue-on-error: true
         run: phplint --json phplint-report.json
       - name: Show PHPLint results in PR
-        run: php ./.github/bin/phplint2pr
+        run: php ./.github/bin/phplint2pr phplint-report.json
   cs:
     name: Coding Standards (PHP 7.4)
     timeout-minutes: 15
