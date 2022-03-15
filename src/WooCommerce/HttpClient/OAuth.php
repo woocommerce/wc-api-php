@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WooCommerce oAuth1.0
  *
@@ -15,11 +16,10 @@ namespace Automattic\WooCommerce\HttpClient;
  */
 class OAuth
 {
-
     /**
      * OAuth signature method algorithm.
      */
-    const HASH_ALGORITHM = 'SHA256';
+    public const HASH_ALGORITHM = 'SHA256';
 
     /**
      * API endpoint URL.

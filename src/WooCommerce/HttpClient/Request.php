@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WooCommerce REST API HTTP Client Request
  *
@@ -15,7 +16,6 @@ namespace Automattic\WooCommerce\HttpClient;
  */
 class Request
 {
-
     /**
      * Request url.
      *

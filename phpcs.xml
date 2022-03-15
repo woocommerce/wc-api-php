@@ -2,6 +2,7 @@
 <ruleset name="WooCommerce REST API - PHP Library">
     <description>The coding standard for WooCommerce REST API - PHP Library.</description>
 
+    <rule ref="PSR12" />
     <file>src</file>
-    <rule ref="PSR2" />
+    <file>tests</file>
 </ruleset>

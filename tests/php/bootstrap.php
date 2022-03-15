@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 /**
  * Tests for WooCommerce REST API PHP-Client.
  *

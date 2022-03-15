@@ -2,11 +2,10 @@
 
 namespace Automattic\WooCommerce\LegacyTests;
 
-use \PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 
 class OptionsTest extends TestCase
 {
-
     protected $options;
 
     public function setUp()

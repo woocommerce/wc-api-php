@@ -2,11 +2,10 @@
 
 namespace Automattic\WooCommerce\Tests;
 
-use \PHPUnit\Framework\TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 
 class HttpClientExceptionTest extends TestCase
 {
-
     protected $exception;
 
     public function setUp(): void

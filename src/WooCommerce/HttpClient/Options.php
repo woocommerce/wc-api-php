@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WooCommerce REST API HTTP Client Options
  *
@@ -15,28 +16,29 @@ namespace Automattic\WooCommerce\HttpClient;
  */
 class Options
 {
-
     /**
      * Default WooCommerce REST API version.
+     *
+     * @var string
      */
-    const VERSION = 'wc/v3';
+    public const VERSION = 'wc/v3';
 
     /**
      * Default request timeout.
      */
-    const TIMEOUT = 15;
+    public const TIMEOUT = 15;
 
     /**
      * Default WP API prefix.
      * Including leading and trailing slashes.
      */
-    const WP_API_PREFIX = '/wp-json/';
+    public const WP_API_PREFIX = '/wp-json/';
 
     /**
      * Default User Agent.
      * No version number.
      */
-    const USER_AGENT = 'WooCommerce API Client-PHP';
+    public const USER_AGENT = 'WooCommerce API Client-PHP';
 
     /**
      * Options.
