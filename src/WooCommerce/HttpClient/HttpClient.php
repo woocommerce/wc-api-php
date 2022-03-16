@@ -238,7 +238,7 @@ class HttpClient
         $headers = $this->getRequestHeaders($hasData);
 
         // HTTP method override feature which masks PUT and DELETE HTTP methods as POST method with added
-        // ?_method=PUT query parameter and/or X-HTTP-Method-Override HTTP header
+        // ?_method=PUT query parameter and/or X-HTTP-Method-Override HTTP header.
         if (!in_array($method, ['GET', 'POST'])) {
             $usePostMethod = false;
             if ($this->options->isMethodOverrideQuery()) {

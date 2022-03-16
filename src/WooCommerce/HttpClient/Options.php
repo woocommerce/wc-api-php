@@ -149,7 +149,7 @@ class Options
     }
 
     /**
-     * Get follow redirects
+     * Get follow redirects.
      *
      * @return bool
      */
@@ -160,7 +160,7 @@ class Options
 
     /**
      * Check is it needed to mask all non-GET/POST methods (PUT/DELETE/etc.) by using POST method with added
-     * query parameter ?_method=METHOD into URL
+     * query parameter ?_method=METHOD into URL.
      *
      * @return bool
      */
@@ -171,7 +171,7 @@ class Options
 
     /**
      * Check is it needed to mask all non-GET/POST methods (PUT/DELETE/etc.) by using POST method with added
-     * "X-HTTP-Method-Override: METHOD" HTTP header into request
+     * "X-HTTP-Method-Override: METHOD" HTTP header into request.
      *
      * @return bool
      */

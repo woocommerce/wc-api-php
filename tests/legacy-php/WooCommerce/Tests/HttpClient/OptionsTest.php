@@ -52,4 +52,19 @@ class OptionsTest extends TestCase
     {
         $this->assertEquals('WooCommerce API Client-PHP', $this->options->userAgent());
     }
+
+    public function testDefaultValueOfgetFollowRedirects()
+    {
+        $this->assertFalse($this->options->getFollowRedirects());
+    }
+
+    public function testDefaultValueOfisMethodOverrideQuery()
+    {
+        $this->assertFalse($this->options->isMethodOverrideQuery());
+    }
+
+    public function testDefaultValueOfisMethodOverrideHeader()
+    {
+        $this->assertFalse($this->options->isMethodOverrideHeader());
+    }
 }
