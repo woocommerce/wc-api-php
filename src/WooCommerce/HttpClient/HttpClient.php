@@ -142,7 +142,11 @@ class HttpClient
     protected function buildUrlQuery($url, $parameters = [])
     {
         if (!empty($parameters)) {
-            $url .= '?' . \http_build_query($parameters);
+            if (false !== strpos($url, '?')) {
+                $url .= '&' . \http_build_query($parameters);
+            } else {
+                $url .= '?' . \http_build_query($parameters);
+            }
         }
 
         return $url;
