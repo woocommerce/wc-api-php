@@ -3,4 +3,6 @@ vendor/
 composer.lock
 .phpunit.result.cache
 .phplint.cache
+phpcs-report.xml
+phplint-report.json
 run.php
