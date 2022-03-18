@@ -153,7 +153,7 @@ try {
 
 ## Release History
 
-- 2022-03-18 - 3.1.0 - Added new options to support `_method` and `X-HTTP-Method-Override` from WP.
+- 2022-03-18 - 3.1.0 - Added new options to support `_method` and `X-HTTP-Method-Override` from WP, supports 7+, dropped support to PHP 5.
 - 2019-01-16 - 3.0.0 - Legacy API turned off by default, and improved JSON error handler.
 - 2018-03-29 - 2.0.1 - Fixed fatal errors on `lookForErrors`.
 - 2018-01-12 - 2.0.0 - Responses changes from arrays to `stdClass` objects. Added `follow_redirects` option.
