@@ -403,6 +403,9 @@ class HttpClient
             $body = substr($body, 3);
         }
 
+        // strip out instances of the Unicode NULL character (\u0000) from property names
+        $body = str_replace('\u0000', '', $body);
+
         $parsedResponse = \json_decode($body);
 
         // Test if return a valid JSON.
