@@ -380,12 +380,16 @@ class HttpClient
                 $errorCode    = $errors->code;
             }
 
+            if($this->response->getCode() == 301){
+                return $this->response;
+            }
+
             throw new HttpClientException(
                 \sprintf('Error: %s [%s]', $errorMessage, $errorCode),
                 $this->response->getCode(),
                 $this->request,
                 $this->response
-            );
+                );
         }
     }
 
@@ -408,6 +412,11 @@ class HttpClient
         // Test if return a valid JSON.
         if (JSON_ERROR_NONE !== json_last_error()) {
             $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Invalid JSON returned';
+
+            if($this->response->getCode() == 301){
+                return $this->response;
+            }
+
             throw new HttpClientException(
                 sprintf('JSON ERROR: %s', $message),
                 $this->response->getCode(),
