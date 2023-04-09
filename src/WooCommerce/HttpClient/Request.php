@@ -56,7 +56,7 @@ class Request
      *
      * @param string $url        Request url.
      * @param string $method     Request method.
-     * @param array  $parameters Request paramenters.
+     * @param array  $parameters Request parameters.
      * @param array  $headers    Request headers.
      * @param string $body       Request body.
      */
