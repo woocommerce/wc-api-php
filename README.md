@@ -106,7 +106,7 @@ $woocommerce->options($endpoint);
 
 | Params       | Type     | Description                                                  |
 | ------------ | -------- | ------------------------------------------------------------ |
-| `endpoint`   | `string` | WooCommerce API endpoint, example: `customers` or `order/12` |
+| `endpoint`   | `string` | WooCommerce API endpoint, example: `customers` or `orders/12` |
 | `data`       | `array`  | Only for POST and PUT, data that will be converted to JSON   |
 | `parameters` | `array`  | Only for GET and DELETE, request query string                |
 
