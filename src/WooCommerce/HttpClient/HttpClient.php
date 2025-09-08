@@ -392,7 +392,7 @@ class HttpClient
     /**
      * Process response.
      *
-     * @return \stdClass
+     * @return \stdClass|array
      */
     protected function processResponse()
     {
@@ -429,7 +429,7 @@ class HttpClient
      * @param array  $data       Request data.
      * @param array  $parameters Request parameters.
      *
-     * @return \stdClass
+     * @return \stdClass|array
      */
     public function request($endpoint, $method, $data = [], $parameters = [])
     {

@@ -75,7 +75,7 @@ class Client
      * @param string $endpoint   API endpoint.
      * @param array  $parameters Request parameters.
      *
-     * @return \stdClass
+     * @return \stdClass|array
      */
     public function get($endpoint, $parameters = [])
     {
