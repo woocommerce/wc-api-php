@@ -5,6 +5,12 @@ on:
     # Run every day at 1:00 AM UTC
     - cron: "0 1 * * *"
   workflow_dispatch:
+    inputs:
+      debug_only:
+        description: 'Run in debug-only mode (no actual changes)'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   issues: write
@@ -17,6 +23,7 @@ jobs:
       - uses: actions/stale@v9
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          debug-only: ${{ inputs.debug_only }}
           stale-issue-message: |
             This issue has been automatically marked as stale because it has not had
             recent activity. It will be closed if no further activity occurs. Thank you
@@ -33,10 +40,10 @@ jobs:
             this is still needed, please feel free to reopen it.
           stale-issue-label: stale
           stale-pr-label: stale
-          days-before-stale: 7
+          days-before-stale: 60
           days-before-close: 7
           days-before-pr-stale: 30
-          days-before-pr-close: 14
-          exempt-issue-labels: bug,enhancement
-          exempt-pr-labels: bug,enhancement
+          days-before-pr-close: 3
+          exempt-issue-labels: pinned,security,bug,enhancement,documentation
+          exempt-pr-labels: pinned,security,bug,enhancement,documentation
           operations-per-run: 100
