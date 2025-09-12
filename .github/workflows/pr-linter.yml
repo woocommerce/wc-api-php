@@ -1,8 +1,8 @@
 name: PR - Linter
 on: pull_request
 jobs:
-  lint:
-    name: PHP ${{ matrix.php }} Linter
+  phpcs:
+    name: PHP CodeSniffer (PHP ${{ matrix.php }})
     timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
@@ -16,34 +16,15 @@ jobs:
         uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16e # v2.34.1
         with:
           php-version: ${{ matrix.php }}
-          tools: phplint
-      - name: Tool versions
-        run: |
-          php --version
-          phplint --version
-      - name: Run PHP Linter
-        continue-on-error: true
-        run: phplint --json phplint-report.json
-      - name: Show PHPLint results in PR
-        run: php ./.github/bin/phplint2pr phplint-report.json
-  cs:
-    name: Coding Standards (PHP 7.4)
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16e # v2.34.1
-        with:
-          php-version: 7.4
           tools: phpcs, cs2pr
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --no-scripts
       - name: Tool versions
         run: |
           php --version
-          phpcs --version
+          vendor/bin/phpcs --version
       - name: Run PHP CodeSniffer
         continue-on-error: true
-        run: phpcs -p --encoding=utf-8 -s -p --report-full --report-checkstyle=./phpcs-report.xml
+        run: vendor/bin/phpcs --standard=phpcs.xml --report-checkstyle=./phpcs-report.xml
       - name: Show PHPCS results in PR
         run: cs2pr ./phpcs-report.xml
