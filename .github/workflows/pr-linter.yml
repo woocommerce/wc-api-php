@@ -17,14 +17,12 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: phpcs, cs2pr
-      - name: Install dependencies
-        run: composer install --no-dev --prefer-dist --no-scripts
       - name: Tool versions
         run: |
           php --version
-          vendor/bin/phpcs --version
+          phpcs --version
       - name: Run PHP CodeSniffer
         continue-on-error: true
-        run: vendor/bin/phpcs --standard=phpcs.xml --report-checkstyle=./phpcs-report.xml
+        run: phpcs --standard=phpcs.xml --report-checkstyle=./phpcs-report.xml
       - name: Show PHPCS results in PR
         run: cs2pr ./phpcs-report.xml
