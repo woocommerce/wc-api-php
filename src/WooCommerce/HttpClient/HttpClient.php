@@ -372,7 +372,7 @@ class HttpClient
             $errorMessage = '';
             $errorCode = '';
 
-            if (is_array($errors)) {
+            if (is_array($errors) && $errors) {
                 $errorMessage = $errors[0]->message;
                 $errorCode    = $errors[0]->code;
             } elseif (isset($errors->message, $errors->code)) {
