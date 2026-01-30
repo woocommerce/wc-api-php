@@ -143,13 +143,13 @@ class HttpClient
     {
         if (!empty($parameters)) {
             if (false !== strpos($url, '?')) {
-                $url .= '&' . \http_build_query($parameters);
+                $url .= '&' . \http_build_query($parameters, '', '&');
             } else {
-                $url .= '?' . \http_build_query($parameters);
+                $url .= '?' . \http_build_query($parameters, '', '&');
             }
         }
 
-        return html_entity_decode($url);
+        return $url;
     }
 
     /**
