@@ -206,7 +206,7 @@ class OAuth
      * @param  array  $params      Array of parameters to convert.
      * @param  array  $queryParams Array to extend.
      * @param  string $key         Optional Array key to append
-     * @return string              Array of urlencoded strings
+     * @return array               Array of urlencoded strings
      */
     protected function joinWithEqualsSign($params, $queryParams = [], $key = '')
     {
