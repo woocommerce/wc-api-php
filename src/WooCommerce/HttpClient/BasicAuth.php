@@ -19,7 +19,7 @@ class BasicAuth
     /**
      * cURL handle.
      *
-     * @var resource
+     * @var resource|\CurlHandle
      */
     protected $ch;
 
@@ -54,11 +54,11 @@ class BasicAuth
     /**
      * Initialize Basic Authentication class.
      *
-     * @param resource $ch             cURL handle.
-     * @param string   $consumerKey    Consumer key.
-     * @param string   $consumerSecret Consumer Secret.
-     * @param bool     $doQueryString  Do or not query string auth.
-     * @param array    $parameters     Request parameters.
+     * @param resource|\CurlHandle $ch             cURL handle.
+     * @param string               $consumerKey    Consumer key.
+     * @param string               $consumerSecret Consumer Secret.
+     * @param bool                 $doQueryString  Do or not query string auth.
+     * @param array                $parameters     Request parameters.
      */
     public function __construct($ch, $consumerKey, $consumerSecret, $doQueryString, $parameters = [])
     {

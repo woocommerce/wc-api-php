@@ -27,7 +27,7 @@ class HttpClient
     /**
      * cURL handle.
      *
-     * @var resource
+     * @var resource|\CurlHandle
      */
     protected $ch;
 
@@ -450,7 +450,10 @@ class HttpClient
             throw new HttpClientException('cURL Error: ' . \curl_error($this->ch), 0, $request, $response);
         }
 
-        \curl_close($this->ch);
+        // we have to call curl_close only for PHP < 8
+        if (\is_resource($this->ch)) {
+            \curl_close($this->ch);
+        }
 
         return $this->processResponse();
     }
