@@ -153,6 +153,7 @@ try {
 
 ## Release History
 
+- 2026-01-30 - 3.1.1 - Added PHP 8.5 support, fixed return type annotations, fixed query string handling when `arg_separator.output` is configured as `&amp;`, fixed empty errors array warning.
 - 2022-03-18 - 3.1.0 - Added new options to support `_method` and `X-HTTP-Method-Override` from WP, supports 7+, dropped support to PHP 5.
 - 2019-01-16 - 3.0.0 - Legacy API turned off by default, and improved JSON error handler.
 - 2018-03-29 - 2.0.1 - Fixed fatal errors on `lookForErrors`.
