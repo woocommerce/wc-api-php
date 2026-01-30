@@ -11,12 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ["7.4", "8.0", "8.1"]
+        php: ["7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5"]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup PHP
-        uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16e # v2.34.1
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           tools: composer
@@ -26,6 +26,6 @@ jobs:
           php --version
           composer --version
       - name: Install composer packages
-        run: ./.github/bin/install-dependencies
+        run: composer install --no-interaction --prefer-dist
       - name: Run tests
-        run: ./.github/bin/run-phpunit
+        run: ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-text
