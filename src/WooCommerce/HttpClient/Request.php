@@ -31,7 +31,7 @@ class Request
     private $method;
 
     /**
-     * Request paramenters.
+     * Request parameters.
      *
      * @var array
      */
@@ -92,7 +92,7 @@ class Request
     /**
      * Set parameters.
      *
-     * @param array $parameters Request paramenters.
+     * @param array $parameters Request parameters.
      */
     public function setParameters($parameters)
     {
